@@ -21,8 +21,8 @@
     <ProjectReference Include="..\Snoop\Snoop.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="CommandLineParser" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" />
+  </ItemGroup>
 
 </Project>

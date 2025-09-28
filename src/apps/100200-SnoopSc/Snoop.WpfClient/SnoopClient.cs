@@ -106,11 +106,6 @@
                 {
                     LogHelper.WriteLine("Injector could not be started.");
                 }
-
-                //InjectorLauncherManager.Launch(processInfo, targetHwnd,
-                //    assemblyName,
-                //    className,
-                //    methodInfo.Name, transientSettingsFile);
             }
             catch (Exception e)
             {
