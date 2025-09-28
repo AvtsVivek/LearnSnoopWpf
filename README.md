@@ -9,3 +9,4 @@ A repo to try and understand Snoop Wpf
 5. asdf
 6. HEre we go...
 7. Test 7
+8. Test 8

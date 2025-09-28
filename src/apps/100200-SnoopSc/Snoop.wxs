@@ -1,0 +1,83 @@
+﻿<Wix xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package Name="Snoop" Manufacturer="https://github.com/snoopwpf" Language="1033" Version="$(var.ProductVersion)"
+             UpgradeCode="FBEC01D7-CE1B-46F4-9498-71A96FEA8A15" InstallerVersion="301">
+        <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Newer version already installed."
+                      AllowSameVersionUpgrades="yes"/>
+
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR"/>
+        <Property Id="ARPPRODUCTICON" Value="icon.ico"/>
+
+        <ui:WixUI Id="WixUI_InstallDir"/>
+        <WixVariable Id="WixUILicenseRtf" Value="License.rtf"/>
+        <WixVariable Id="WixUIBannerBmp" Value="..\..\Artwork\Banner.bmp"/>
+        <WixVariable Id="WixUIDialogBmp" Value="..\..\Artwork\Dialog.bmp"/>
+        <Icon Id="Snoop.exe" SourceFile="Snoop.exe"/>
+        <Icon Id="icon.ico" SourceFile="..\..\Artwork\Snoop.ico"/>
+
+        <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+        <Feature Id="ProductFeature" Title="Snoop" Description="Snoop, the WPF Spying Utility" Level="1"
+                 ConfigurableDirectory="INSTALLDIR">
+            <Files Directory="net462" Include="net462/Snoop.*" />
+            <Files Directory="net462" Include="net462/System.Management.Automation.dll" />
+
+            <Files Directory="net60" Include="net6.0-windows/Snoop.*" />
+
+            <ComponentGroupRef Id="MainFiles"/>
+
+            <ComponentRef Id="SnoopScriptsComponent"/>
+            <ComponentRef Id="ProgramMenuDir"/>
+        </Feature>
+
+        <ComponentGroup Id="MainFiles" Directory="INSTALLDIR">
+            <Files Include="Snoop.GenericInjector.*.dll" />
+            <Files Include="Snoop.GenericInjector.*.pdb" />
+            <Files Include="Snoop.InjectorLauncher.*.json" />
+            <Files Include="Snoop.InjectorLauncher.*.dll" />
+            <Files Include="Snoop.InjectorLauncher.*.dll.config" />
+            <Files Include="Snoop.InjectorLauncher.*.exe" />
+            <Files Include="Snoop.InjectorLauncher.*.exe.config" />
+            <Files Include="Snoop.InjectorLauncher.*.pdb" />
+
+            <Files Include="Snoop.Core.*" />
+
+            <File Source="Snoop.exe">
+                <Shortcut Id="desktopSnoopShortcut" Directory="DesktopFolder" Name="Snoop"
+                          WorkingDirectory="INSTALLDIR" Icon="Snoop.exe" IconIndex="0" Advertise="yes"/>
+                <Shortcut Id="startMenuSnoopShortcut" Directory="ProgramMenuDir" Name="Snoop"
+                          WorkingDirectory="INSTALLDIR" Icon="Snoop.exe" IconIndex="0" Advertise="yes"/>
+            </File>
+
+            <Files Include="Snoop.exe.config" />
+            <Files Include="Snoop.pdb" />
+            <Files Include="Snoop.com" />
+            <Files Include="Snoop.com.config" />
+
+            <Files Include="CommandLine.dll" />
+        </ComponentGroup>
+
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLDIR" Name="Snoop">
+                <Directory Id="net462" Name="net462" />
+                <Directory Id="net60" Name="net6.0-windows" />
+
+                <Directory Id="SnoopScriptsFolder" Name="Scripts">
+                    <Component Id="SnoopScriptsComponent" Guid="65AD97C3-5B32-4020-892C-1D0E38656D6D">
+                        <File Source="Scripts\Snoop.psm1"/>
+                    </Component>
+                </Directory>
+            </Directory>
+        </StandardDirectory>
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ProgramMenuDir" Name="Snoop">
+                <Component Id="ProgramMenuDir" Guid="F04C55F5-09D6-40CD-90E3-FA46E5E4A93D">
+                    <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
+                    <RegistryValue Root="HKCU" Key="Software\[ProductName]" Type="string" Value="" KeyPath="yes"/>
+                </Component>
+            </Directory>
+        </StandardDirectory>
+
+        <StandardDirectory Id="DesktopFolder"/>
+    </Package>
+</Wix>
