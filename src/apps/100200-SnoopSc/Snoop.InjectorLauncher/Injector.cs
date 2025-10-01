@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
 using JetBrains.Annotations;
 using Snoop.Infrastructure;
 
@@ -237,6 +239,10 @@ public static class Injector
 
         var stringForRemoteProcess = string.Join("<|>", parameters);
 
+        CopyStuffToClipBoard(stringForRemoteProcess);
+
+        MessageBox.Show($"100044: {stringForRemoteProcess}");
+
         var bufLen = (stringForRemoteProcess.Length + 1) * Marshal.SizeOf(typeof(char));
 
         LogMessage($"Trying to allocate {bufLen} bytes in foreign process...");
@@ -351,5 +357,13 @@ public static class Injector
 
             Marshal.FreeHGlobal(address);
         }
+    }
+
+    public static void CopyStuffToClipBoard(string text)
+    {
+        Thread thread = new Thread(() => Clipboard.SetText(text));
+        thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
+        thread.Start();
+        thread.Join(); //Wait for the thread to end
     }
 }

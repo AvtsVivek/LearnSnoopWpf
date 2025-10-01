@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
+    using System.Windows;
     using CommandLine;
     using Snoop.Data;
     using Snoop.Infrastructure;
@@ -18,6 +19,9 @@
         {
             var processInfo = new ProcessInfo(processId);
             string transientSettingsFile = this.GetTransientSettingsFile(SnoopStartTarget.SnoopUI, targetHwnd);
+
+            Clipboard.SetText(transientSettingsFile); // For diagnostic purposes only. To be removed later. 
+
             try
             {
                 MethodInfo methodInfo = typeof(SnoopManager).GetMethod(nameof(SnoopManager.StartSnoop))!;
@@ -31,6 +35,8 @@
                 // If we get the architecture wrong here the InjectorLauncher will fix this by starting a secondary instance.
                 var architecture = NativeMethods.GetArchitectureWithoutException(processInfo.Process);
                 var injectorLauncherExe = Path.Combine(directory, $"Snoop.InjectorLauncher.{architecture}.exe");
+
+                Clipboard.SetText(injectorLauncherExe); // For diagnostic purposes only. To be removed later.
 
                 if (File.Exists(injectorLauncherExe) is false)
                 {
@@ -57,11 +63,14 @@
 
                 var commandLine = Parser.Default.FormatCommandLine(injectorLauncherCommandLineOptions);
 
+                Clipboard.SetText(commandLine);
+
                 var processStartInfo = new ProcessStartInfo(injectorLauncherExe, commandLine)
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    WindowStyle = Program.Debug ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
+                    // WindowStyle = Program.Debug ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
+                    WindowStyle = ProcessWindowStyle.Normal,
                     Verb = processInfo.IsProcessElevated
                     ? "runas"
                     : null,

@@ -9,6 +9,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Windows;
 using CommandLine;
 using Snoop.Data;
 using Snoop.Infrastructure;
@@ -25,6 +27,8 @@ public static class Program
 
     private static int Run(InjectorLauncherCommandLineOptions commandLineOptions)
     {
+        // MessageBox.Show("100011");
+
         if (commandLineOptions.Debug)
         {
             Debugger.Launch();
@@ -87,6 +91,8 @@ public static class Program
                     TargetWindowHandle = processWrapper.WindowHandle.ToInt64()
                 }.WriteToFile();
 
+            MessageBox.Show($"100022: {settingsFile}");
+
             var injectorData = new InjectorData
             {
                 FullAssemblyPath = GetAssemblyPath(processWrapper, commandLineOptions.Assembly),
@@ -100,6 +106,10 @@ public static class Program
                 Injector.LogMessage($"Could not find assembly \"{injectorData.FullAssemblyPath}\".");
                 return 1;
             }
+
+            Injector.CopyStuffToClipBoard(injectorData.ToString());
+
+            MessageBox.Show($"100033: {injectorData.ToString()}");
 
             try
             {
