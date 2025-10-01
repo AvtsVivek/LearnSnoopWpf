@@ -12,11 +12,24 @@
 
         public ProcessManager()
         {
-            this.processesAndWindows = NativeMethods.GetProcessesAndWindows();
+            this.processesAndWindows = new Dictionary<int, IList<IntPtr>>();
+            this.LoadProcessesAndWindows();
+        }
+
+        private void LoadProcessesAndWindows()
+        {
+            this.processesAndWindows.Clear();
+            var processesAndWindows = NativeMethods.GetProcessesAndWindows();
+            foreach (var kvp in processesAndWindows)
+            {
+                this.processesAndWindows[kvp.Key] = kvp.Value;
+            }
         }
 
         public IntPtr GetWindow(int processId)
         {
+            this.LoadProcessesAndWindows();
+
             if (this.processesAndWindows.TryGetValue(processId, out var windows) && windows.Any())
             {
                 return windows.First();
