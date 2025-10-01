@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BasicProcInjector.Core/BasicProcInjector.Core.csproj" />
+  <Project Path="BasicProcInjector.InjectionLauncher/BasicProcInjector.InjectionLauncher.csproj" />
+  <Project Path="BasicProcInjector.WpfInjectorHost/BasicProcInjector.WpfInjectorHost.csproj" />
+</Solution>
