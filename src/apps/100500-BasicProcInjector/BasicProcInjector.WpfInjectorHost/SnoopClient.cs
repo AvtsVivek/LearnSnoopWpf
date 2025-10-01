@@ -6,7 +6,7 @@
     using BasicProcInjector.WpfInjectorHost.Utilities;
     using CommandLine;
     using BasicProcInjector.Core;
-    using BasicProcInjector.InjectionLauncher;
+    using BasicProcInjector.InjectorLauncher;
 
     internal class SnoopClient
     {

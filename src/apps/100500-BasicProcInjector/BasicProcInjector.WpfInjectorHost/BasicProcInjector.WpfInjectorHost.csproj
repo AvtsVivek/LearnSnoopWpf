@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BasicProcInjector.InjectionLauncher\BasicProcInjector.InjectionLauncher.csproj" />
+    <ProjectReference Include="..\BasicProcInjector.InjectorLauncher\BasicProcInjector.InjectorLauncher.csproj" />
   </ItemGroup>
 
   <ItemGroup>

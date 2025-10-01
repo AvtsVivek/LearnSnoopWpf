@@ -1,7 +1,7 @@
 ﻿namespace BasicProcInjector.WpfInjectorHost
 {
     using BasicProcInjector.WpfInjectorHost.Utilities;
-    using BasicProcInjector.InjectionLauncher;
+    using BasicProcInjector.InjectorLauncher;
     using System.Windows;
 
     /// <summary>

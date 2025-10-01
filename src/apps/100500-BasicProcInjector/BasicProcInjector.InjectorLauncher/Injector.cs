@@ -1,4 +1,4 @@
-namespace BasicProcInjector.InjectionLauncher;
+namespace BasicProcInjector.InjectorLauncher;
 
 using BasicProcInjector.Core;
 using System;
