@@ -1,0 +1,50 @@
+﻿namespace Snoop.WpfClient.Utilities
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    public static class PresentationTraceSourcesHelperNew
+    {
+        private static bool alreadyRefreshed;
+
+        public static void RefreshAndEnsureRequiredLevel(bool forceRefresh = false)
+        {
+            // wrap the following PresentationTraceSources.Refresh() call in a try/catch
+            // sometimes a NullReferenceException occurs
+            // due to empty <filter> elements in the app.config file of the app you are snooping
+            try
+            {
+                if (alreadyRefreshed == false
+                    || forceRefresh)
+                {
+                    PresentationTraceSources.Refresh();
+                }
+            }
+            catch (Exception exception)
+            {
+                // swallow all exceptions since you can snoop just fine anyways and we don't want the process to crash
+                LogHelperNew.WriteLine(exception);
+            }
+            finally
+            {
+                alreadyRefreshed = true;
+            }
+
+            EnsureRequiredLevel();
+        }
+
+        public static void EnsureRequiredLevel()
+        {
+            // to get all failed binding results we have to increase the trace level
+            const SourceLevels requiredLevel = SourceLevels.Information;
+            if (PresentationTraceSources.DataBindingSource.Switch.Level < requiredLevel)
+            {
+                PresentationTraceSources.DataBindingSource.Switch.Level = requiredLevel;
+            }
+        }
+    }
+}

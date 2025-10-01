@@ -1,29 +1,27 @@
-﻿namespace Snoop.WpfClient
+﻿namespace Snoop.WpfClient.Utilities
 {
+    using System;
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
     using CommandLine;
-    using Snoop.WpfClient.Utilities;
 
-    internal class SnoopClient
+    public static class InjectorLauncherManagerNew
     {
-        public SnoopClient()
+        public static void Launch(ProcessInfoNew processInfo, IntPtr targetHwnd, MethodInfo methodInfo, TransientSettingsDataNew transientSettingsData)
         {
+            Launch(processInfo, targetHwnd, methodInfo.DeclaringType!.Assembly.GetName().Name, methodInfo.DeclaringType.FullName!, methodInfo.Name, transientSettingsData.WriteToFile());
         }
 
-        public AttachResultNew StartSnoopProcess(int processId, IntPtr targetHwnd)
+        public static void Launch(ProcessInfoNew processInfo, IntPtr targetHwnd, string assembly, string className, string methodName, string transientSettingsFile)
         {
-            var processInfo = new ProcessInfoNew(processId);
-            string transientSettingsFile = this.GetTransientSettingsFile(SnoopStartTargetNew.SnoopUI, targetHwnd);
+            if (File.Exists(transientSettingsFile) == false)
+            {
+                throw new FileNotFoundException("The generated temporary settings file could not be found.", transientSettingsFile);
+            }
+
             try
             {
-                MethodInfo methodInfo = typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!;
-                if (!File.Exists(transientSettingsFile))
-                {
-                    throw new FileNotFoundException("The generated temporary settings file could not be found.", transientSettingsFile);
-                }
-
                 var location = Assembly.GetExecutingAssembly().Location;
                 var directory = Path.GetDirectoryName(location) ?? string.Empty;
                 // If we get the architecture wrong here the InjectorLauncher will fix this by starting a secondary instance.
@@ -33,36 +31,33 @@
                 if (File.Exists(injectorLauncherExe) is false)
                 {
                     var message = @$"Could not find the injector launcher ""{injectorLauncherExe}"".
-                    Snoop requires this component, which is part of the Snoop project, to do it's job.
-                    - If you compiled snoop yourself, you should compile all required components.
-                    - If you downloaded snoop you should not omit any files contained in the archive you downloaded and make sure that no anti virus deleted the file.";
+Snoop requires this component, which is part of the Snoop project, to do it's job.
+- If you compiled snoop yourself, you should compile all required components.
+- If you downloaded snoop you should not omit any files contained in the archive you downloaded and make sure that no anti virus deleted the file.";
                     throw new FileNotFoundException(message, injectorLauncherExe);
                 }
 
-                var assemblyName = methodInfo.DeclaringType!.Assembly.GetName().Name;
-                var className = methodInfo.DeclaringType.FullName!;
                 var injectorLauncherCommandLineOptions = new InjectorLauncherCommandLineOptionsNew
                 {
                     TargetPID = processInfo.Process.Id,
                     TargetHwnd = targetHwnd.ToInt32(),
-                    Assembly = assemblyName,
+                    Assembly = assembly,
                     ClassName = className,
-                    MethodName = methodInfo.Name,
+                    MethodName = methodName,
                     SettingsFile = transientSettingsFile,
                     Debug = ProgramNew.Debug,
                     AttachConsoleToParent = true
                 };
 
                 var commandLine = Parser.Default.FormatCommandLine(injectorLauncherCommandLineOptions);
-
                 var processStartInfo = new ProcessStartInfo(injectorLauncherExe, commandLine)
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     WindowStyle = ProgramNew.Debug ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
                     Verb = processInfo.IsProcessElevated
-                    ? "runas"
-                    : null,
+                        ? "runas"
+                        : null,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
                 };
@@ -105,35 +100,10 @@
                     LogHelperNew.WriteLine("Injector could not be started.");
                 }
             }
-            catch (Exception e)
-            {
-                return new AttachResultNew(e);
-            }
             finally
             {
                 File.Delete(transientSettingsFile);
             }
-
-            return new AttachResultNew();
-        }
-
-        public string GetTransientSettingsFile(SnoopStartTargetNew startTarget, IntPtr targetWindowHandle)
-        {
-            var settings = new SettingsSnoopNew().Load();
-
-            var transientSettingData = new TransientSettingsDataNew
-            {
-                StartTarget = startTarget,
-                TargetWindowHandle = targetWindowHandle.ToInt64(),
-                MultipleAppDomainMode = settings.MultipleAppDomainMode,
-                MultipleDispatcherMode = settings.MultipleDispatcherMode,
-                SetOwnerWindow = settings.SetOwnerWindow,
-                ShowActivated = settings.ShowActivated,
-                EnableDiagnostics = settings.EnableDiagnostics,
-                ILSpyPath = settings.ILSpyPath
-            };
-
-            return transientSettingData.WriteToFile();
         }
     }
 }

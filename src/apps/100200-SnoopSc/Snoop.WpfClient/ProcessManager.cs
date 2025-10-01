@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Snoop.Infrastructure;
+    using Snoop.WpfClient.Utilities;
 
     internal class ProcessManager
     {
@@ -12,7 +12,7 @@
 
         public ProcessManager()
         {
-            this.processesAndWindows = NativeMethods.GetProcessesAndWindows();
+            this.processesAndWindows = NativeMethodsNew.GetProcessesAndWindows();
         }
 
         public IntPtr GetWindow(int processId)
@@ -25,9 +25,9 @@
             return IntPtr.Zero;
         }
 
-        public WindowInfo GetWindowInfo(IntPtr intPtr)
+        public WindowInfoNew GetWindowInfo(IntPtr intPtr)
         {
-            return WindowInfo.GetWindowInfo(intPtr);
+            return WindowInfoNew.GetWindowInfo(intPtr);
         }
 
         public bool DoesProcessExist(int processId)
