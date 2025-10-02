@@ -37,7 +37,7 @@ public sealed class DiagnosticContext : IDisposable, INotifyPropertyChanged
 
         foreach (var diagnosticProvider in this.DiagnosticProviders)
         {
-            diagnosticProvider.IsActive = TransientSettingsDataNew.Current?.EnableDiagnostics ?? true;
+            diagnosticProvider.IsActive = TransientSettingsData.Current?.EnableDiagnostics ?? true;
             diagnosticProvider.PropertyChanged += this.HandleDiagnosticProviderPropertyChanged;
         }
     }

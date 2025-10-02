@@ -19,8 +19,8 @@ public static class SnoopWindowUtils
 {
     public static Window? FindOwnerWindow(Window ownedWindow)
     {
-        var ownerWindow = TransientSettingsDataNew.Current is not null
-            ? WindowHelper.GetVisibleWindow(TransientSettingsDataNew.Current.TargetWindowHandle, ownedWindow.Dispatcher)
+        var ownerWindow = TransientSettingsData.Current is not null
+            ? WindowHelper.GetVisibleWindow(TransientSettingsData.Current.TargetWindowHandle, ownedWindow.Dispatcher)
             : null;
 
         if (ownerWindow is null

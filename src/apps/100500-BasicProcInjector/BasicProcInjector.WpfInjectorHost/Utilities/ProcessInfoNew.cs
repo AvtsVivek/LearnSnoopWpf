@@ -81,11 +81,11 @@
             return new AttachResultNew();
         }
 
-        private static TransientSettingsDataNew CreateTransientSettingsData(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
+        private static TransientSettingsData CreateTransientSettingsData(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
         {
             var settings = SettingsSnoopNew.Default;
 
-            return new TransientSettingsDataNew
+            return new TransientSettingsData
             {
                 StartTarget = startTarget,
                 TargetWindowHandle = targetWindowHandle.ToInt64(),

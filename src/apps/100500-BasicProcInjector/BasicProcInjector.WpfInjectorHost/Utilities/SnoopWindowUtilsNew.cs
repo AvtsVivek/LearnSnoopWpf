@@ -9,8 +9,8 @@
     {
         public static Window? FindOwnerWindow(Window ownedWindow)
         {
-            var ownerWindow = TransientSettingsDataNew.Current is not null
-                ? WindowHelperNew.GetVisibleWindow(TransientSettingsDataNew.Current.TargetWindowHandle, ownedWindow.Dispatcher)
+            var ownerWindow = TransientSettingsData.Current is not null
+                ? WindowHelperNew.GetVisibleWindow(TransientSettingsData.Current.TargetWindowHandle, ownedWindow.Dispatcher)
                 : null;
 
             if (ownerWindow is null

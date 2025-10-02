@@ -81,7 +81,7 @@ public static class Program
 
             var settingsFile = string.IsNullOrEmpty(commandLineOptions.SettingsFile) == false
                 ? commandLineOptions.SettingsFile
-                : new TransientSettingsDataNew
+                : new TransientSettingsData
                 {
                     StartTarget = BasicProcInjectorStartTargetNew.SnoopUI,
                     TargetWindowHandle = processWrapper.WindowHandle.ToInt64()

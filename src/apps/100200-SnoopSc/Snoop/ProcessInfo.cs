@@ -77,11 +77,11 @@ public class ProcessInfo
         return new AttachResult();
     }
 
-    private static TransientSettingsDataNew CreateTransientSettingsData(SnoopStartTarget startTarget, IntPtr targetWindowHandle)
+    private static TransientSettingsData CreateTransientSettingsData(SnoopStartTarget startTarget, IntPtr targetWindowHandle)
     {
         var settings = Settings.Default;
 
-        return new TransientSettingsDataNew
+        return new TransientSettingsData
         {
             StartTarget = startTarget,
             TargetWindowHandle = targetWindowHandle.ToInt64(),

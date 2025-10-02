@@ -132,7 +132,7 @@
         {
             var settings = new Snoop.Settings().Load();
 
-            var transientSettingData = new TransientSettingsDataNew
+            var transientSettingData = new TransientSettingsData
             {
                 StartTarget = startTarget,
                 TargetWindowHandle = targetWindowHandle.ToInt64(),

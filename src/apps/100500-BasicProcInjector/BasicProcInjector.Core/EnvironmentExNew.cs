@@ -15,14 +15,14 @@
         CurrentProcessName = OperatingSystem.IsWindows()
             ? Path.GetFileNameWithoutExtension(CurrentProcessPath) : Path.GetFileName(CurrentProcessPath);
 #else
-            using var currentProcess = Process.GetCurrentProcess();
+            using var currentProcess = System.Diagnostics.Process.GetCurrentProcess();
             CurrentProcessName = currentProcess.ProcessName;
             CurrentProcessPath = GetProcessPath(currentProcess);
 #endif
         }
 
 #if !NET
-        private static string? GetProcessPath(Process process)
+        private static string? GetProcessPath(System.Diagnostics.Process process)
         {
             try
             {

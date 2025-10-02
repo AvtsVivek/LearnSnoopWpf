@@ -23,7 +23,7 @@
 
             this.ownerWindow = SnoopWindowUtilsNew.FindOwnerWindow(this);
 
-            if (TransientSettingsDataNew.Current?.SetOwnerWindow == true)
+            if (TransientSettingsData.Current?.SetOwnerWindow == true)
             {
                 this.Owner = this.ownerWindow;
             }
@@ -45,7 +45,7 @@
                 ElementHost.EnableModelessKeyboardInterop(this);
             }
 
-            this.ShowActivated = TransientSettingsDataNew.Current?.ShowActivated is not false;
+            this.ShowActivated = TransientSettingsData.Current?.ShowActivated is not false;
             this.Show();
 
             LogHelperNew.WriteLine("Shown snoop UI.");

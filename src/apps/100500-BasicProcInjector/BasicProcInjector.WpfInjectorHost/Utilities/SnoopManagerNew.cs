@@ -30,7 +30,7 @@
 
         private void RunInCurrentAppDomain(string settingsFile)
         {
-            var settingsData = TransientSettingsDataNew.LoadCurrentIfRequired(settingsFile);
+            var settingsData = TransientSettingsData.LoadCurrentIfRequired(settingsFile);
             new SnoopManagerNew().RunInCurrentAppDomain(settingsData);
         }
     }
@@ -67,7 +67,7 @@
         {
             LogHelperNew.WriteLine("Starting snoop...");
 
-            var settingsData = TransientSettingsDataNew.LoadCurrent(settingsFile);
+            var settingsData = TransientSettingsData.LoadCurrent(settingsFile);
 
             IList<AppDomain>? appDomains = null;
 
@@ -171,7 +171,7 @@
             return succeeded;
         }
 
-        public bool RunInCurrentAppDomain(TransientSettingsDataNew settingsData)
+        public bool RunInCurrentAppDomain(TransientSettingsData settingsData)
         {
             LogHelperNew.WriteLine($"Trying to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\"...");
 
@@ -259,7 +259,7 @@
             }
         }
 
-        private static SnoopMainBaseWindowNew CreateSnoopWindow(TransientSettingsDataNew settingsData, DispatcherRootObjectPair dispatcherRootObjectPair,
+        private static SnoopMainBaseWindowNew CreateSnoopWindow(TransientSettingsData settingsData, DispatcherRootObjectPair dispatcherRootObjectPair,
             Func<SnoopMainBaseWindowNew> instanceCreator)
         {
             var snoopWindow = instanceCreator();
@@ -305,8 +305,8 @@
             return string.Empty;
         }
 
-        private static bool InjectSnoopIntoDispatchers(TransientSettingsDataNew settingsData,
-            Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindowNew> instanceCreator)
+        private static bool InjectSnoopIntoDispatchers(TransientSettingsData settingsData,
+            Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindowNew> instanceCreator)
         {
             // Check and see if any of the PresentationSources have different dispatchers.
             // If so, ask the user if they wish to enter multiple dispatcher mode.
@@ -430,17 +430,17 @@
 
         private class DispatchOutParameters
         {
-            public DispatchOutParameters(TransientSettingsDataNew settingsData,
-                Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindowNew> instanceCreator, List<DispatcherRootObjectPair> dispatcherRootObjectPairs)
+            public DispatchOutParameters(TransientSettingsData settingsData,
+                Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindowNew> instanceCreator, List<DispatcherRootObjectPair> dispatcherRootObjectPairs)
             {
                 this.SettingsData = settingsData;
                 this.InstanceCreator = instanceCreator;
                 this.DispatcherRootObjectPairs = dispatcherRootObjectPairs;
             }
 
-            public TransientSettingsDataNew SettingsData { get; }
+            public TransientSettingsData SettingsData { get; }
 
-            public Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindowNew> InstanceCreator { get; }
+            public Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindowNew> InstanceCreator { get; }
 
             public List<DispatcherRootObjectPair> DispatcherRootObjectPairs { get; }
         }

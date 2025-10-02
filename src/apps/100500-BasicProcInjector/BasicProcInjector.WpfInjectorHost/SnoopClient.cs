@@ -39,10 +39,12 @@
             //        C:\Trials\LearnSnoopWpf\src\apps\100500 - BasicProcInjector\BasicProcInjector.WpfInjectorHost\bin\Debug\Snoop.Core.dll
             //Snoop.Infrastructure.SnoopManager.StartSnoop
             // C:\Trials\LearnSnoopWpf\src\apps\100200-SnoopSc\bin\Debug\net6.0-windows
-            injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100200-SnoopSc\bin\Debug\net6.0-windows\Snoop.Core.dll";
-            // injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100500-BasicProcInjector\BasicProcInjector.WpfInjectorHost\bin\Debug\Snoop.Core.dll";
-            injectorData.ClassName = "Snoop.Infrastructure.SnoopManager";
-            injectorData.MethodName = "StartSnoop";
+
+            //injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100500-BasicProcInjector\BasicProcInjector.WpfInjectorHost\bin\Debug\Snoop.Core.dll";
+            //// injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100200-SnoopSc\bin\Debug\net6.0-windows\Snoop.Core.dll";
+            //injectorData.ClassName = "Snoop.Infrastructure.SnoopManager";
+            //injectorData.MethodName = "StartSnoop";
+            Clipboard.SetText(injectorData.FullAssemblyPath);
             Injector.InjectIntoProcess(processWrapper, injectorData);
         }
 
@@ -161,7 +163,7 @@
         {
             var settings = new SettingsSnoopNew().Load();
 
-            var transientSettingData = new TransientSettingsDataNew
+            var transientSettingData = new TransientSettingsData
             {
                 StartTarget = startTarget,
                 TargetWindowHandle = targetWindowHandle.ToInt64(),

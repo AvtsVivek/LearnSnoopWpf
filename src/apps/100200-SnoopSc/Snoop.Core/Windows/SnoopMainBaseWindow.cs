@@ -24,7 +24,7 @@ public abstract class SnoopMainBaseWindow : SnoopBaseWindow
 
         this.ownerWindow = SnoopWindowUtils.FindOwnerWindow(this);
 
-        if (TransientSettingsDataNew.Current?.SetOwnerWindow == true)
+        if (TransientSettingsData.Current?.SetOwnerWindow == true)
         {
             this.Owner = this.ownerWindow;
         }
@@ -46,7 +46,7 @@ public abstract class SnoopMainBaseWindow : SnoopBaseWindow
             ElementHost.EnableModelessKeyboardInterop(this);
         }
 
-        this.ShowActivated = TransientSettingsDataNew.Current?.ShowActivated is not false;
+        this.ShowActivated = TransientSettingsData.Current?.ShowActivated is not false;
         this.Show();
 
         LogHelper.WriteLine("Shown snoop UI.");

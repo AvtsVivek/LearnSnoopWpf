@@ -31,4 +31,12 @@
   <PropertyGroup Condition="'$(TargetFramework)' != '$(MinTargetFramework)'">
     <DefineConstants>$(DefineConstants);USE_WPF_BINDING_DIAG</DefineConstants>
   </PropertyGroup>
+
+<Target Name="CustomMessageTarget" AfterTargets="Build">
+	<Message Text="This is a custom message from MSBuild during the build process" Importance="high" />
+	<Message Text="Target Framework is  $(TargetFramework)" Importance="high" />
+	<Message Text="Min Target Framework is  $(MinTargetFramework)" Importance="high" />
+	<Message Text="Min Core Target Framework is  $(MinCoreTargetFramework)" Importance="high" />
+	<Message Text="Target Frameworks is  $(TargetFrameworks)" Importance="high" />
+</Target>
 </Project>

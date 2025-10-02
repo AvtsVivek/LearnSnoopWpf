@@ -9,7 +9,7 @@
 
     public static class InjectorLauncherManagerNew
     {
-        public static void Launch(ProcessInfoNew processInfo, IntPtr targetHwnd, MethodInfo methodInfo, TransientSettingsDataNew transientSettingsData)
+        public static void Launch(ProcessInfoNew processInfo, IntPtr targetHwnd, MethodInfo methodInfo, TransientSettingsData transientSettingsData)
         {
             Launch(processInfo, targetHwnd, methodInfo.DeclaringType!.Assembly.GetName().Name, methodInfo.DeclaringType.FullName!, methodInfo.Name, transientSettingsData.WriteToFile());
         }
