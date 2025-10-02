@@ -3,12 +3,12 @@
     using System;
     using System.IO;
 
-    public static class EnvironmentExNew
+    public static class EnvironmentEx
     {
         public static readonly string? CurrentProcessName;
         public static readonly string? CurrentProcessPath;
 
-        static EnvironmentExNew()
+        static EnvironmentEx()
         {
 #if NET
         CurrentProcessPath = Environment.ProcessPath;

@@ -1,6 +1,6 @@
 ﻿namespace BasicProcInjector.Core
 {
-    public class InjectorDataNew
+    public class InjectorData
     {
         public string FullAssemblyPath { get; set; } = string.Empty;
 

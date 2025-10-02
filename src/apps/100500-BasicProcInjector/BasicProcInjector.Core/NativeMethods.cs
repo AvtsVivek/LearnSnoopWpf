@@ -9,7 +9,7 @@
     using System.Xml.Serialization;
     using Microsoft.Win32.SafeHandles;
 
-    public static class NativeMethodsNew
+    public static class NativeMethods
     {
         public const int ERROR_ACCESS_DENIED = 5;
 
@@ -168,7 +168,7 @@
             }
             catch (Exception exception)
             {
-                LogHelperNew.WriteError(exception);
+                LogHelper.WriteError(exception);
                 return Environment.Is64BitOperatingSystem
                     ? "x64"
                     : "x86";
@@ -424,13 +424,13 @@
                 if (mod.ModuleName.Equals(moduleName, StringComparison.OrdinalIgnoreCase)
                     || mod.FileName.Equals(moduleName, StringComparison.OrdinalIgnoreCase))
                 {
-                    LogHelperNew.WriteLine($"Checking module \"{moduleName}\" with base address \"{mod.BaseAddress}\" for procaddress of \"{procName}\"...");
+                    LogHelper.WriteLine($"Checking module \"{moduleName}\" with base address \"{mod.BaseAddress}\" for procaddress of \"{procName}\"...");
 
                     var procAddress = GetProcAddress(mod!.BaseAddress, procName).ToInt64();
 
                     if (procAddress != 0)
                     {
-                        LogHelperNew.WriteLine($"Got proc address in foreign process with \"{procAddress}\".");
+                        LogHelper.WriteLine($"Got proc address in foreign process with \"{procAddress}\".");
                         functionOffsetFromBaseAddress = procAddress - (long)mod.BaseAddress;
                     }
 
@@ -460,7 +460,7 @@
                 if (mod!.ModuleName.Equals(moduleName, StringComparison.OrdinalIgnoreCase)
                     || mod!.FileName.Equals(moduleName, StringComparison.OrdinalIgnoreCase))
                 {
-                    LogHelperNew.WriteLine($"Found module \"{moduleName}\" with base address \"{mod!.BaseAddress}\".");
+                    LogHelper.WriteLine($"Found module \"{moduleName}\" with base address \"{mod!.BaseAddress}\".");
                     return mod!.BaseAddress;
                 }
             }
@@ -791,11 +791,11 @@
         /// </summary>
         public static void AttachConsoleToParentProcessOrAllocateNewOne()
         {
-            if (NativeMethodsNew.AttachConsole(NativeMethodsNew.ATTACH_PARENT_PROCESS) == false
-                && Marshal.GetLastWin32Error() == NativeMethodsNew.ERROR_ACCESS_DENIED)
+            if (NativeMethods.AttachConsole(NativeMethods.ATTACH_PARENT_PROCESS) == false
+                && Marshal.GetLastWin32Error() == NativeMethods.ERROR_ACCESS_DENIED)
             {
                 // A console was not allocated, so we need to make one.
-                if (NativeMethodsNew.FreeConsole() == false)
+                if (NativeMethods.FreeConsole() == false)
                 {
                     Trace.WriteLine("Console could not be freed.");
                 }
@@ -804,7 +804,7 @@
                     Trace.WriteLine("Console freed.");
                 }
 
-                if (NativeMethodsNew.AttachConsole(NativeMethodsNew.ATTACH_PARENT_PROCESS) == false)
+                if (NativeMethods.AttachConsole(NativeMethods.ATTACH_PARENT_PROCESS) == false)
                 {
                     Trace.WriteLine($"Could not attach to parent process console. Error = {Marshal.GetLastWin32Error()}");
                 }

@@ -10,10 +10,10 @@ public class ProcessWrapper
     {
         this.Process = process ?? throw new ArgumentNullException(nameof(process));
         this.Id = process.Id;
-        this.Handle = NativeMethodsNew.OpenProcess(NativeMethodsNew.ProcessAccessFlags.All, false, process.Id);
+        this.Handle = NativeMethods.OpenProcess(NativeMethods.ProcessAccessFlags.All, false, process.Id);
         this.WindowHandle = windowHandle;
 
-        this.Architecture = NativeMethodsNew.GetArchitectureWithoutException(this.Process);
+        this.Architecture = NativeMethods.GetArchitectureWithoutException(this.Process);
 
         this.SupportedFrameworkName = GetSupportedTargetFramework(process);
     }
@@ -22,7 +22,7 @@ public class ProcessWrapper
 
     public int Id { get; }
 
-    public NativeMethodsNew.ProcessHandle Handle { get; }
+    public NativeMethods.ProcessHandle Handle { get; }
 
     public IntPtr WindowHandle { get; }
 
@@ -59,7 +59,7 @@ public class ProcessWrapper
 
     private static Process? GetProcessFromWindowHandle(IntPtr windowHandle)
     {
-        _ = NativeMethodsNew.GetWindowThreadProcessId(windowHandle, out var processId);
+        _ = NativeMethods.GetWindowThreadProcessId(windowHandle, out var processId);
 
         if (processId == 0)
         {
@@ -83,7 +83,7 @@ public class ProcessWrapper
 
     private static string GetSupportedTargetFramework(Process process)
     {
-        var modules = NativeMethodsNew.GetModules(process);
+        var modules = NativeMethods.GetModules(process);
 
         FileVersionInfo? systemRuntimeVersion = null;
         FileVersionInfo? wpfGFXVersion = null;

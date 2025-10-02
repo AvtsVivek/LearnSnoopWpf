@@ -20,7 +20,7 @@
         private void LoadProcessesAndWindows()
         {
             this.processesAndWindows.Clear();
-            var processesAndWindows = NativeMethodsNew.GetProcessesAndWindows();
+            var processesAndWindows = NativeMethods.GetProcessesAndWindows();
             foreach (var kvp in processesAndWindows)
             {
                 this.processesAndWindows[kvp.Key] = kvp.Value;

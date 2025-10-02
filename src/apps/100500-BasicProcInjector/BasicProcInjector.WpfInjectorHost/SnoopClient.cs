@@ -28,7 +28,7 @@
 
             string transientSettingsFile = this.GetTransientSettingsFile(BasicProcInjectorStartTargetNew.SnoopUI, targetHwnd);
 
-            var injectorData = new InjectorDataNew
+            var injectorData = new InjectorData
             {
                 FullAssemblyPath = snoopAssemblyPath,
                 ClassName = className,

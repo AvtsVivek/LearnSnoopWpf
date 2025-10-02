@@ -5,7 +5,7 @@
     using System.IO;
     using System.Linq;
 
-    public static class SettingsHelperNew
+    public static class SettingsHelper
     {
 #pragma warning disable SA1310
         public const string SNOOP_INSTALL_PATH_ENV_VAR = "SNOOP_INSTALL_PATH";
@@ -35,7 +35,7 @@
 
         public static string GetApplicationSpecificSettingsFile()
         {
-            var file = $"AppSettings\\{EnvironmentExNew.CurrentProcessName}.xml";
+            var file = $"AppSettings\\{EnvironmentEx.CurrentProcessName}.xml";
             return FindExistingSettingsFile(file)
                 ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
         }
@@ -87,7 +87,7 @@
 
             // 2. from ".Snoop" folders
             {
-                var startPath = EnvironmentExNew.CurrentProcessPath;
+                var startPath = EnvironmentEx.CurrentProcessPath;
                 var currentPath = startPath;
 
                 if (string.IsNullOrEmpty(currentPath) is false)

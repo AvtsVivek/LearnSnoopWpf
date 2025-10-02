@@ -19,7 +19,7 @@ public static class Injector
     {
         var logMessage = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + ": " + message;
 
-        LogHelperNew.WriteLine(message);
+        LogHelper.WriteLine(message);
 
         var applicationDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Snoop");
 
@@ -44,7 +44,7 @@ public static class Injector
     }
 
     // [PublicAPI]
-    public static void InjectIntoProcess(IntPtr windowHandle, InjectorDataNew injectorData)
+    public static void InjectIntoProcess(IntPtr windowHandle, InjectorData injectorData)
     {
         var processFromHandle = ProcessWrapper.FromWindowHandle(windowHandle);
 
@@ -57,7 +57,7 @@ public static class Injector
     }
 
     // [PublicAPI]
-    public static void InjectIntoProcess(ProcessWrapper processWrapper, InjectorDataNew injectorData)
+    public static void InjectIntoProcess(ProcessWrapper processWrapper, InjectorData injectorData)
     {
         StartBasicProcInjector(processWrapper, injectorData);
     }
@@ -77,7 +77,7 @@ public static class Injector
         var stringForRemoteProcess = pathToDll;
 
         var bufLen = (stringForRemoteProcess.Length + 1) * Marshal.SizeOf(typeof(char));
-        var remoteAddress = NativeMethodsNew.VirtualAllocEx(processWrapper.Handle, IntPtr.Zero, (uint)bufLen, NativeMethodsNew.AllocationType.Commit, NativeMethodsNew.MemoryProtection.ReadWrite);
+        var remoteAddress = NativeMethods.VirtualAllocEx(processWrapper.Handle, IntPtr.Zero, (uint)bufLen, NativeMethods.AllocationType.Commit, NativeMethods.MemoryProtection.ReadWrite);
 
         if (remoteAddress == IntPtr.Zero)
         {
@@ -90,7 +90,7 @@ public static class Injector
         try
         {
             LogMessage($"Trying to write {size} bytes in foreign process");
-            var writeProcessMemoryResult = NativeMethodsNew.WriteProcessMemory(processWrapper.Handle, remoteAddress, address, size, out var bytesWritten);
+            var writeProcessMemoryResult = NativeMethods.WriteProcessMemory(processWrapper.Handle, remoteAddress, address, size, out var bytesWritten);
 
             if (writeProcessMemoryResult == false
                 || bytesWritten == 0)
@@ -98,11 +98,11 @@ public static class Injector
                 throw Marshal.GetExceptionForHR(Marshal.GetLastWin32Error()) ?? new Exception("Unknown error while trying to write to foreign process memory.");
             }
 
-            var hLibrary = NativeMethodsNew.GetModuleHandle("kernel32");
+            var hLibrary = NativeMethods.GetModuleHandle("kernel32");
 
             // Load dll into the remote process
             // (via CreateRemoteThread & LoadLibrary)
-            var procAddress = NativeMethodsNew.GetProcAddress(hLibrary, "LoadLibraryW");
+            var procAddress = NativeMethods.GetProcAddress(hLibrary, "LoadLibraryW");
 
             if (procAddress == IntPtr.Zero)
             {
@@ -110,7 +110,7 @@ public static class Injector
                 throw new Win32Exception();
             }
 
-            var remoteThread = NativeMethodsNew.CreateRemoteThread(processWrapper.Handle,
+            var remoteThread = NativeMethods.CreateRemoteThread(processWrapper.Handle,
                 IntPtr.Zero,
                 0,
                 procAddress,
@@ -128,10 +128,10 @@ public static class Injector
                 }
                 else
                 {
-                    NativeMethodsNew.WaitForSingleObject(remoteThread);
+                    NativeMethods.WaitForSingleObject(remoteThread);
 
                     // Get handle of the loaded module
-                    if (NativeMethodsNew.GetExitCodeThread(remoteThread, out moduleHandleInForeignProcess) == false)
+                    if (NativeMethods.GetExitCodeThread(remoteThread, out moduleHandleInForeignProcess) == false)
                     {
                         throw new Win32Exception();
                     }
@@ -139,12 +139,12 @@ public static class Injector
             }
             finally
             {
-                NativeMethodsNew.CloseHandle(remoteThread);
+                NativeMethods.CloseHandle(remoteThread);
             }
 
             try
             {
-                NativeMethodsNew.VirtualFreeEx(processWrapper.Handle, remoteAddress, bufLen, NativeMethodsNew.AllocationType.Release);
+                NativeMethods.VirtualFreeEx(processWrapper.Handle, remoteAddress, bufLen, NativeMethods.AllocationType.Release);
             }
             catch (Exception e)
             {
@@ -156,7 +156,7 @@ public static class Injector
                 throw new Exception($"Could not load \"{pathToDll}\" in process \"{processWrapper.Id}\".");
             }
 
-            var remoteHandle = NativeMethodsNew.GetRemoteModuleHandle(processWrapper.Process, Path.GetFileName(pathToDll));
+            var remoteHandle = NativeMethods.GetRemoteModuleHandle(processWrapper.Process, Path.GetFileName(pathToDll));
 
             LogMessage($"Successfully loaded \"{pathToDll}\" with handle \"{moduleHandleInForeignProcess}\" (\"{remoteHandle}\") in process \"{processWrapper.Id}\".");
 
@@ -177,16 +177,16 @@ public static class Injector
 
         LogMessage($"Freeing \"{moduleHandleInForeignProcess}\" in process \"{processWrapper.Id}\"...");
 
-        var hLibrary = NativeMethodsNew.GetModuleHandle("kernel32");
+        var hLibrary = NativeMethods.GetModuleHandle("kernel32");
 
-        var procAddress = NativeMethodsNew.GetProcAddress(hLibrary, "FreeLibraryAndExitThread");
+        var procAddress = NativeMethods.GetProcAddress(hLibrary, "FreeLibraryAndExitThread");
 
         if (procAddress == IntPtr.Zero)
         {
             // todo: error handling
         }
 
-        var remoteThread = NativeMethodsNew.CreateRemoteThread(processWrapper.Handle,
+        var remoteThread = NativeMethods.CreateRemoteThread(processWrapper.Handle,
             IntPtr.Zero,
             0,
             procAddress,
@@ -201,11 +201,11 @@ public static class Injector
                 return false;
             }
 
-            NativeMethodsNew.WaitForSingleObject(remoteThread);
+            NativeMethods.WaitForSingleObject(remoteThread);
         }
         finally
         {
-            NativeMethodsNew.CloseHandle(remoteThread);
+            NativeMethods.CloseHandle(remoteThread);
         }
 
         LogMessage($"Successfully freed \"{moduleHandleInForeignProcess}\" in process \"{processWrapper.Id}\".");
@@ -213,7 +213,7 @@ public static class Injector
         return true;
     }
 
-    private static void StartBasicProcInjector(ProcessWrapper processWrapper, InjectorDataNew injectorData)
+    private static void StartBasicProcInjector(ProcessWrapper processWrapper, InjectorData injectorData)
     {
         var injectorDllName = $"BasicProcInjector.CppInjectorCore.{processWrapper.Architecture}.dll";
         var pathToInjectorDll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, injectorDllName);
@@ -245,7 +245,7 @@ public static class Injector
 
         LogMessage($"Trying to allocate {bufLen} bytes in foreign process...");
 
-        var remoteAddress = NativeMethodsNew.VirtualAllocEx(processWrapper.Handle, IntPtr.Zero, (uint)bufLen, NativeMethodsNew.AllocationType.Commit | NativeMethodsNew.AllocationType.Reserve, NativeMethodsNew.MemoryProtection.ReadWrite);
+        var remoteAddress = NativeMethods.VirtualAllocEx(processWrapper.Handle, IntPtr.Zero, (uint)bufLen, NativeMethods.AllocationType.Commit | NativeMethods.AllocationType.Reserve, NativeMethods.MemoryProtection.ReadWrite);
 
         if (remoteAddress == IntPtr.Zero)
         {
@@ -260,7 +260,7 @@ public static class Injector
 
         try
         {
-            var writeProcessMemoryResult = NativeMethodsNew.WriteProcessMemory(processWrapper.Handle, remoteAddress, address, size, out var bytesWritten);
+            var writeProcessMemoryResult = NativeMethods.WriteProcessMemory(processWrapper.Handle, remoteAddress, address, size, out var bytesWritten);
 
             if (writeProcessMemoryResult == false
                 || bytesWritten == 0)
@@ -274,14 +274,14 @@ public static class Injector
             try
             {
                 // Load library into current process before trying to get the remote proc address
-                hLibrary = NativeMethodsNew.LoadLibrary(pathToInjectorDll);
+                hLibrary = NativeMethods.LoadLibrary(pathToInjectorDll);
 
                 // Load library into foreign process before invoking our method
                 var moduleHandleInForeignProcess = LoadLibraryInForeignProcess(processWrapper, pathToInjectorDll);
 
                 try
                 {
-                    var remoteProcAddress = NativeMethodsNew.GetRemoteProcAddress(processWrapper.Process, injectorDllName, "ExecuteInDefaultAppDomain");
+                    var remoteProcAddress = NativeMethods.GetRemoteProcAddress(processWrapper.Process, injectorDllName, "ExecuteInDefaultAppDomain");
 
                     if (remoteProcAddress == IntPtr.Zero)
                     {
@@ -293,7 +293,7 @@ public static class Injector
                     LogMessage($"Calling \"ExecuteInDefaultAppDomain\" on injector component...");
                     LogMessage($"Args = {stringForRemoteProcess}");
 
-                    var remoteThread = NativeMethodsNew.CreateRemoteThread(processWrapper.Handle, IntPtr.Zero, 0, remoteProcAddress, remoteAddress, 0, out _);
+                    var remoteThread = NativeMethods.CreateRemoteThread(processWrapper.Handle, IntPtr.Zero, 0, remoteProcAddress, remoteAddress, 0, out _);
 
                     try
                     {
@@ -304,10 +304,10 @@ public static class Injector
                             throw new Win32Exception();
                         }
 
-                        NativeMethodsNew.WaitForSingleObject(remoteThread);
+                        NativeMethods.WaitForSingleObject(remoteThread);
 
                         // Get handle of the loaded module
-                        NativeMethodsNew.GetExitCodeThread(remoteThread, out var resultFromExecuteInDefaultAppDomain);
+                        NativeMethods.GetExitCodeThread(remoteThread, out var resultFromExecuteInDefaultAppDomain);
 
                         LogMessage($"Received \"{resultFromExecuteInDefaultAppDomain}\" from injector component.");
 
@@ -325,7 +325,7 @@ public static class Injector
                     }
                     finally
                     {
-                        NativeMethodsNew.CloseHandle(remoteThread);
+                        NativeMethods.CloseHandle(remoteThread);
                     }
                 }
                 finally
@@ -337,12 +337,12 @@ public static class Injector
             {
                 if (hLibrary != IntPtr.Zero)
                 {
-                    NativeMethodsNew.FreeLibrary(hLibrary);
+                    NativeMethods.FreeLibrary(hLibrary);
                 }
 
                 try
                 {
-                    NativeMethodsNew.VirtualFreeEx(processWrapper.Handle, remoteAddress, bufLen, NativeMethodsNew.AllocationType.Release);
+                    NativeMethods.VirtualFreeEx(processWrapper.Handle, remoteAddress, bufLen, NativeMethods.AllocationType.Release);
                 }
                 catch (Exception e)
                 {

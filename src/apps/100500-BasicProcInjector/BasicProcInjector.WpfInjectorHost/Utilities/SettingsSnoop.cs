@@ -22,7 +22,7 @@
 
         public SettingsSnoop()
         {
-            this.SettingsFile = SettingsHelperNew.GetSettingsFileForBasicProcInjector();
+            this.SettingsFile = SettingsHelper.GetSettingsFileForBasicProcInjector();
         }
 
         public static SettingsSnoop Default { get; } = new SettingsSnoop().Load();

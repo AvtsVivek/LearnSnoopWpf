@@ -20,7 +20,7 @@
 
         public Process Process { get; }
 
-        public bool IsProcessElevated => this.isOwningProcessElevated ??= NativeMethodsNew.IsProcessElevated(this.Process);
+        public bool IsProcessElevated => this.isOwningProcessElevated ??= NativeMethods.IsProcessElevated(this.Process);
 
     }
 }

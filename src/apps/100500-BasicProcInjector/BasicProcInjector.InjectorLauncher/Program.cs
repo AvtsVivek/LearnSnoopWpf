@@ -51,7 +51,7 @@ public static class Program
             // If they don't match we redirect everything to the appropriate injector launcher.
             {
                 using var currentProcess = Process.GetCurrentProcess();
-                var currentProcessArchitecture = NativeMethodsNew.GetArchitectureWithoutException(currentProcess);
+                var currentProcessArchitecture = NativeMethods.GetArchitectureWithoutException(currentProcess);
                 if (processWrapper.Architecture.Equals(currentProcessArchitecture, StringComparison.Ordinal) == false)
                 {
                     Injector.LogMessage("Target process and injector process have different architectures, trying to redirect to secondary process...");
@@ -87,7 +87,7 @@ public static class Program
                     TargetWindowHandle = processWrapper.WindowHandle.ToInt64()
                 }.WriteToFile();
 
-            var injectorData = new InjectorDataNew
+            var injectorData = new InjectorData
             {
                 FullAssemblyPath = GetAssemblyPath(processWrapper, commandLineOptions.Assembly),
                 ClassName = commandLineOptions.ClassName,

@@ -66,7 +66,7 @@
                 }
                 catch (Exception exception)
                 {
-                    LogHelperNew.WriteError(exception);
+                    LogHelper.WriteError(exception);
                 }
             }
 
@@ -77,7 +77,7 @@
 
         public void Save()
         {
-            LogHelperNew.WriteLine($"Writing settings to \"{this.SettingsFile}\"");
+            LogHelper.WriteLine($"Writing settings to \"{this.SettingsFile}\"");
 
             var directory = Path.GetDirectoryName(this.SettingsFile);
 

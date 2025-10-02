@@ -3,7 +3,7 @@
     using System;
     using System.Diagnostics;
 
-    public static class LogHelperNew
+    public static class LogHelper
     {
         public static string WriteLine(Exception exception)
         {

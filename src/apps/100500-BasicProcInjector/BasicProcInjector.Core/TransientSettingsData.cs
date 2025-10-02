@@ -28,13 +28,13 @@
 
         public bool EnableDiagnostics { get; set; } = true;
 
-        public string? BasicProcInjectorInstallPath { get; set; } = Environment.GetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR);
+        public string? BasicProcInjectorInstallPath { get; set; } = Environment.GetEnvironmentVariable(SettingsHelper.SNOOP_INSTALL_PATH_ENV_VAR);
 
         public string WriteToFile()
         {
             var settingsFile = Path.GetTempFileName();
 
-            LogHelperNew.WriteLine($"Writing transient settings file to \"{settingsFile}\"");
+            LogHelper.WriteLine($"Writing transient settings file to \"{settingsFile}\"");
 
             using var stream = new FileStream(settingsFile, FileMode.Create);
             serializer.Serialize(stream, this);
@@ -54,12 +54,12 @@
 
         public static TransientSettingsData LoadCurrent(string settingsFile)
         {
-            LogHelperNew.WriteLine($"Loading transient settings file from \"{settingsFile}\"");
+            LogHelper.WriteLine($"Loading transient settings file from \"{settingsFile}\"");
 
             using var stream = new FileStream(settingsFile, FileMode.Open);
             Current = (TransientSettingsData?)serializer.Deserialize(stream) ?? new TransientSettingsData();
 
-            Environment.SetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR, Current.BasicProcInjectorInstallPath, EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(SettingsHelper.SNOOP_INSTALL_PATH_ENV_VAR, Current.BasicProcInjectorInstallPath, EnvironmentVariableTarget.Process);
 
             return Current;
         }
