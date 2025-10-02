@@ -19,6 +19,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\BasicProcInjector.Core\BasicProcInjector.Core.csproj" />
+		<ProjectReference Include="..\Snoop.Core\Snoop.Core.csproj" />
 	</ItemGroup>
 
   <!--<PropertyGroup>

@@ -8,6 +8,7 @@
     using System.Windows;
     using CommandLine;
     using BasicProcInjector.Core;
+    using System.Diagnostics;
 
     public static class ProgramNew
     {
@@ -21,19 +22,23 @@
         [STAThread]
         public static int MainNew(string[] args)
         {
-            Environment.SetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR,
-                Path.GetDirectoryName(EnvironmentExNew.CurrentProcessPath), EnvironmentVariableTarget.Process);
+            //Environment.SetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR,
+            //    Path.GetDirectoryName(EnvironmentExNew.CurrentProcessPath), EnvironmentVariableTarget.Process);
 
-            var helpWriter = new StringWriter();
+            //var helpWriter = new StringWriter();
 
-            var parser = new Parser(x => x.HelpWriter = helpWriter);
+            //var parser = new Parser(x => x.HelpWriter = helpWriter);
 
-            return parser.ParseArguments<InspectCommandLineOptionsNew, MagnifyCommandLineOptionsNew, SnoopCommandLineOptionsNew>(args)
-                .MapResult(
-                    (InspectCommandLineOptionsNew options) => Inspect(options),
-                    (MagnifyCommandLineOptionsNew options) => Magnify(options),
-                    (SnoopCommandLineOptionsNew options) => Run(options),
-                    errs => ErrorHandler(args, errs.ToList(), helpWriter));
+            //return parser.ParseArguments<InspectCommandLineOptionsNew, MagnifyCommandLineOptionsNew, SnoopCommandLineOptionsNew>(args)
+            //    .MapResult(
+            //        (InspectCommandLineOptionsNew options) => Inspect(options),
+            //        (MagnifyCommandLineOptionsNew options) => Magnify(options),
+            //        (SnoopCommandLineOptionsNew options) => Run(options),
+            //        errs => ErrorHandler(args, errs.ToList(), helpWriter));
+
+            Debugger.Break();
+            
+            return 0;
         }
 
         private static int Inspect(InspectCommandLineOptionsNew options)

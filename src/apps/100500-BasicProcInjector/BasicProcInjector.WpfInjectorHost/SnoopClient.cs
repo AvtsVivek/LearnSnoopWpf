@@ -7,6 +7,7 @@
     using CommandLine;
     using BasicProcInjector.Core;
     using BasicProcInjector.InjectorLauncher;
+    using Snoop.Infrastructure;
 
     internal class SnoopClient
     {
@@ -18,11 +19,13 @@
         {
             var processWrapper = ProcessWrapper.From(processId, targetHwnd);
 
-            MethodInfo methodInfo = typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!;
+            MethodInfo methodInfo = typeof(SnoopManager).GetMethod(nameof(SnoopManager.StartSnoop))!;
 
             var assemblyName = methodInfo.DeclaringType!.Assembly.GetName().Name;
 
-            var fullAssemblyPath = Assembly.GetExecutingAssembly().Location;
+            var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
+
+            var snoopAssemblyPath = Assembly.GetAssembly(typeof(SnoopManager))!.Location;
 
             var className = methodInfo.DeclaringType.FullName!;
 
@@ -30,7 +33,7 @@
 
             var injectorData = new InjectorDataNew
             {
-                FullAssemblyPath = fullAssemblyPath,
+                FullAssemblyPath = snoopAssemblyPath,
                 ClassName = className,
                 MethodName = methodInfo.Name,
                 SettingsFile = transientSettingsFile
@@ -46,117 +49,6 @@
             //injectorData.MethodName = "StartSnoop";
             Clipboard.SetText(injectorData.FullAssemblyPath);
             Injector.InjectIntoProcess(processWrapper, injectorData);
-        }
-
-        public AttachResultNew StartSnoopProcess(int processId, IntPtr targetHwnd)
-        {
-            var processInfo = new ProcessInfoNew(processId);
-            string transientSettingsFile = this.GetTransientSettingsFile(BasicProcInjectorStartTargetNew.SnoopUI, targetHwnd);
-            try
-            {
-                MethodInfo methodInfo = typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!;
-                if (!File.Exists(transientSettingsFile))
-                {
-                    throw new FileNotFoundException("The generated temporary settings file could not be found.", transientSettingsFile);
-                }
-
-                var location = Assembly.GetExecutingAssembly().Location;
-                var directory = Path.GetDirectoryName(location) ?? string.Empty;
-                // If we get the architecture wrong here the InjectorLauncher will fix this by starting a secondary instance.
-                //var architecture = NativeMethodsNew.GetArchitectureWithoutException(processInfo.Process);
-                //var injectorLauncherExe = Path.Combine(directory, $"Snoop.InjectorLauncher.{architecture}.exe");
-
-                var injectorLauncherExe = Path.Combine(directory, $"Snoop.InjectorLauncher.exe");
-
-                Clipboard.SetText(injectorLauncherExe); // For diagnostic purposes only. To be removed later.
-
-                if (File.Exists(injectorLauncherExe) is false)
-                {
-                    var message = @$"Could not find the injector launcher ""{injectorLauncherExe}"".
-                    Snoop requires this component, which is part of the Snoop project, to do it's job.
-                    - If you compiled snoop yourself, you should compile all required components.
-                    - If you downloaded snoop you should not omit any files contained in the archive you downloaded and make sure that no anti virus deleted the file.";
-                    throw new FileNotFoundException(message, injectorLauncherExe);
-                }
-
-                var assemblyName = methodInfo.DeclaringType!.Assembly.GetName().Name;
-                var className = methodInfo.DeclaringType.FullName!;
-                var injectorLauncherCommandLineOptions = new InjectorLauncherCommandLineOptionsNew
-                {
-                    TargetPID = processInfo.Process.Id,
-                    TargetHwnd = targetHwnd.ToInt32(),
-                    Assembly = assemblyName,
-                    ClassName = className,
-                    MethodName = methodInfo.Name,
-                    SettingsFile = transientSettingsFile,
-                    Debug = ProgramNew.Debug,
-                    AttachConsoleToParent = true
-                };
-
-                var commandLine = Parser.Default.FormatCommandLine(injectorLauncherCommandLineOptions);
-
-                Clipboard.SetText(commandLine);
-
-                var processStartInfo = new ProcessStartInfo(injectorLauncherExe, commandLine)
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProgramNew.Debug ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
-                    Verb = processInfo.IsProcessElevated
-                    ? "runas"
-                    : null,
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true
-                };
-
-                LogHelperNew.WriteLine($"Launching injector \"{processStartInfo.FileName}\".");
-                LogHelperNew.WriteLine($"Arguments: {commandLine}.");
-
-                using var process = new Process();
-                process.StartInfo = processStartInfo;
-
-                // Subscribe to output streams
-                process.OutputDataReceived += (_, args) =>
-                {
-                    if (args.Data is not null)
-                    {
-                        LogHelperNew.WriteLine($"[Injector Output] {args.Data}");
-                    }
-                };
-
-                process.ErrorDataReceived += (_, args) =>
-                {
-                    if (args.Data is not null)
-                    {
-                        LogHelperNew.WriteLine($"[Injector Error] {args.Data}");
-                    }
-                };
-
-                if (process.Start())
-                {
-                    // Begin reading output/error streams asynchronously
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-
-                    process.WaitForExit();
-
-                    LogHelperNew.WriteLine($"Injector returned exit code: {process.ExitCode}.");
-                }
-                else
-                {
-                    LogHelperNew.WriteLine("Injector could not be started.");
-                }
-            }
-            catch (Exception e)
-            {
-                return new AttachResultNew(e);
-            }
-            finally
-            {
-                File.Delete(transientSettingsFile);
-            }
-
-            return new AttachResultNew();
         }
 
         public string GetTransientSettingsFile(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
