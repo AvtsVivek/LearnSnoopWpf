@@ -38,7 +38,7 @@
                     return;
                 }
 
-                WindowInfoNew windowInfo = this.processManager.GetWindowInfo(windowHandle);
+                WindowInfo windowInfo = this.processManager.GetWindowInfo(windowHandle);
 
                 var processWrapper = ProcessWrapper.From(processId, windowHandle);
 

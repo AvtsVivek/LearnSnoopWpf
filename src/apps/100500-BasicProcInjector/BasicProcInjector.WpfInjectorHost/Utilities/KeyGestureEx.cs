@@ -9,24 +9,24 @@
     [Serializable]
     [TypeConverter(typeof(KeyGestureExConverterNew))]
     [ValueSerializer(typeof(KeyGestureExValueSerializerNew))]
-    public class KeyGestureExNew : KeyGesture, IEquatable<KeyGestureExNew>
+    public class KeyGestureEx : KeyGesture, IEquatable<KeyGestureEx>
     {
-        public KeyGestureExNew()
+        public KeyGestureEx()
             : this(Key.None)
         {
         }
 
-        public KeyGestureExNew(Key key)
+        public KeyGestureEx(Key key)
             : base(key)
         {
         }
 
-        public KeyGestureExNew(Key key, ModifierKeys modifiers)
+        public KeyGestureEx(Key key, ModifierKeys modifiers)
             : base(key, modifiers)
         {
         }
 
-        public KeyGestureExNew(Key key, ModifierKeys modifiers, string displayString)
+        public KeyGestureEx(Key key, ModifierKeys modifiers, string displayString)
             : base(key, modifiers, displayString)
         {
         }
@@ -60,12 +60,12 @@
                    && modifiers == Keyboard.Modifiers;
         }
 
-        public static implicit operator KeyGestureExNew(string s)
+        public static implicit operator KeyGestureEx(string s)
         {
-            return (KeyGestureExNew)KeyGestureExConverterNew.Default.ConvertFromString(s)!;
+            return (KeyGestureEx)KeyGestureExConverterNew.Default.ConvertFromString(s)!;
         }
 
-        public static implicit operator string(KeyGestureExNew r)
+        public static implicit operator string(KeyGestureEx r)
         {
             return KeyGestureExConverterNew.Default.ConvertToString(r)!;
         }
@@ -82,7 +82,7 @@
 
         public override bool Equals(object? obj)
         {
-            if (obj is not KeyGestureExNew other)
+            if (obj is not KeyGestureEx other)
             {
                 return false;
             }
@@ -90,7 +90,7 @@
             return this.Equals(other);
         }
 
-        public bool Equals(KeyGestureExNew? other)
+        public bool Equals(KeyGestureEx? other)
         {
             if (other is null)
             {
@@ -118,12 +118,12 @@
     }
 #endif
 
-        public static bool operator ==(KeyGestureExNew? left, KeyGestureExNew? right)
+        public static bool operator ==(KeyGestureEx? left, KeyGestureEx? right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(KeyGestureExNew? left, KeyGestureExNew? right)
+        public static bool operator !=(KeyGestureEx? left, KeyGestureEx? right)
         {
             return !Equals(left, right);
         }
@@ -172,7 +172,7 @@
                 var fullName = stringValue.Trim();
                 if (fullName == string.Empty)
                 {
-                    return new KeyGestureExNew(Key.None);
+                    return new KeyGestureEx(Key.None);
                 }
 
                 string keyToken;
@@ -208,7 +208,7 @@
                 var resultKey = keyConverter.ConvertFrom(context, culture, keyToken);
                 var modifiers = (ModifierKeys)modifierKeysConverter.ConvertFrom(context, culture, modifiersToken);
 
-                return new KeyGestureExNew((Key)resultKey, modifiers, displayString);
+                return new KeyGestureEx((Key)resultKey, modifiers, displayString);
             }
 
             throw this.GetConvertFromException(source);
@@ -226,7 +226,7 @@
             {
                 if (value is not null)
                 {
-                    if (value is KeyGestureExNew keyGesture)
+                    if (value is KeyGestureEx keyGesture)
                     {
                         if (keyGesture.Key == Key.None)
                         {

@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Snoop.Core;
-using Snoop.Infrastructure;
 
 public partial class DebugListenerControl : IListener, IDisposable
 {

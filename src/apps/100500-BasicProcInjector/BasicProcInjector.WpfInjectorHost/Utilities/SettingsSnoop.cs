@@ -7,12 +7,12 @@
     using System.Xml.Serialization;
 
     [Serializable]
-    public sealed class SettingsSnoopNew : SettingsBaseNew<SettingsSnoopNew>
+    public sealed class SettingsSnoop : SettingsBase<SettingsSnoop>
     {
-        private static readonly XmlSerializer serializer = new(typeof(SettingsSnoopNew));
+        private static readonly XmlSerializer serializer = new(typeof(SettingsSnoop));
 
         private bool enableDiagnostics = true;
-        private KeyGestureExNew? globalHotKey = new(Key.F12, ModifierKeys.Control | ModifierKeys.Windows | ModifierKeys.Alt);
+        private KeyGestureEx? globalHotKey = new(Key.F12, ModifierKeys.Control | ModifierKeys.Windows | ModifierKeys.Alt);
         private string? ilSpyPath = "%path%";
         private MultipleAppDomainModeNew multipleAppDomainMode = MultipleAppDomainModeNew.Ask;
         private MultipleDispatcherModeNew multipleDispatcherMode = MultipleDispatcherModeNew.Ask;
@@ -20,17 +20,17 @@
         private bool showActivated = true;
         private bool startAppChooserMinimized;
 
-        public SettingsSnoopNew()
+        public SettingsSnoop()
         {
             this.SettingsFile = SettingsHelperNew.GetSettingsFileForBasicProcInjector();
         }
 
-        public static SettingsSnoopNew Default { get; } = new SettingsSnoopNew().Load();
+        public static SettingsSnoop Default { get; } = new SettingsSnoop().Load();
 
         protected override XmlSerializer Serializer => serializer;
 
         [IgnoreDataMember]
-        public string Version { get; } = typeof(SettingsSnoopNew).Assembly.GetName().Version.ToString();
+        public string Version { get; } = typeof(SettingsSnoop).Assembly.GetName().Version.ToString();
 
         public WINDOWPLACEMENT? AppChooserWindowPlacement { get; set; }
 
@@ -95,7 +95,7 @@
         }
 
         [XmlElement(Type = typeof(string))]
-        public KeyGestureExNew? GlobalHotKey
+        public KeyGestureEx? GlobalHotKey
         {
             get => this.globalHotKey;
             set
@@ -155,7 +155,7 @@
             }
         }
 
-        protected override void UpdateWith(SettingsSnoopNew settings)
+        protected override void UpdateWith(SettingsSnoop settings)
         {
             this.SetOwnerWindow = settings.SetOwnerWindow;
             this.ShowActivated = settings.ShowActivated;

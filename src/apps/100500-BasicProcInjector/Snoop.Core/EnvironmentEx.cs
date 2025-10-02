@@ -1,7 +1,6 @@
 ﻿namespace Snoop.Core;
 
 using System;
-using Snoop.Infrastructure;
 
 #if NET
 using System.IO;

@@ -3,7 +3,6 @@ namespace Snoop.Infrastructure.Helpers;
 using System;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
 
 public static class DPIHelper
 {

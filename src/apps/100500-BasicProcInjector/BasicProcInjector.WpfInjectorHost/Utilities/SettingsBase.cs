@@ -11,8 +11,8 @@
     using BasicProcInjector.Core;
 
     [Serializable]
-    public abstract class SettingsBaseNew<T> : INotifyPropertyChanged
-    where T : SettingsBaseNew<T>, new()
+    public abstract class SettingsBase<T> : INotifyPropertyChanged
+    where T : SettingsBase<T>, new()
     {
         private string settingsFile = null!;
 

@@ -39,9 +39,9 @@
             return IntPtr.Zero;
         }
 
-        public WindowInfoNew GetWindowInfo(IntPtr intPtr)
+        public WindowInfo GetWindowInfo(IntPtr intPtr)
         {
-            return WindowInfoNew.GetWindowInfo(intPtr);
+            return WindowInfo.GetWindowInfo(intPtr);
         }
 
         public bool DoesProcessExist(int processId)

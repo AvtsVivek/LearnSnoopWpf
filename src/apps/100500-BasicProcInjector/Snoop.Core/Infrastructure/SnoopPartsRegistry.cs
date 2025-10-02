@@ -11,7 +11,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Snoop.AttachedProperties;
-using Snoop.Core;
 
 /// <summary>
 ///     This service allows Snoop to mark certain visuals as visual tree roots of its own UI.

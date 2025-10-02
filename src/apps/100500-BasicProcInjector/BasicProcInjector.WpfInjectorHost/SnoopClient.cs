@@ -1,10 +1,7 @@
 ﻿namespace BasicProcInjector.WpfInjectorHost
 {
-    using System.Diagnostics;
-    using System.IO;
     using System.Reflection;
     using BasicProcInjector.WpfInjectorHost.Utilities;
-    using CommandLine;
     using BasicProcInjector.Core;
     using BasicProcInjector.InjectorLauncher;
     using Snoop.Infrastructure;
@@ -53,7 +50,7 @@
 
         public string GetTransientSettingsFile(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
         {
-            var settings = new SettingsSnoopNew().Load();
+            var settings = new SettingsSnoop().Load();
 
             var transientSettingData = new TransientSettingsData
             {

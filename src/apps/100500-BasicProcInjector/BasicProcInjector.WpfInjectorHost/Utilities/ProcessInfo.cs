@@ -1,22 +1,19 @@
 ﻿namespace BasicProcInjector.WpfInjectorHost.Utilities
 {
     using BasicProcInjector.Core;
-    using System;
     using System.Diagnostics;
-    using System.Windows;
-    using System.Windows.Input;
 
 
-    public class ProcessInfoNew
+    public class ProcessInfo
     {
         private bool? isOwningProcessElevated;
 
-        public ProcessInfoNew(int processId)
+        public ProcessInfo(int processId)
             : this(Process.GetProcessById(processId))
         {
         }
 
-        public ProcessInfoNew(Process process)
+        public ProcessInfo(Process process)
         {
             this.Process = process;
         }

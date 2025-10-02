@@ -1,8 +1,6 @@
 ﻿namespace Snoop.Data.Tree;
 
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 public class ImageTreeItem : DependencyObjectTreeItem
 {
