@@ -83,7 +83,7 @@ public static class Program
                 ? commandLineOptions.SettingsFile
                 : new TransientSettingsDataNew
                 {
-                    StartTarget = SnoopStartTargetNew.SnoopUI,
+                    StartTarget = BasicProcInjectorStartTargetNew.SnoopUI,
                     TargetWindowHandle = processWrapper.WindowHandle.ToInt64()
                 }.WriteToFile();
 

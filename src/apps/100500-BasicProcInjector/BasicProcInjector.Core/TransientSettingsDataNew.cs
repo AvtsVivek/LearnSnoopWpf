@@ -12,7 +12,7 @@
 
         public static TransientSettingsDataNew? Current { get; private set; }
 
-        public SnoopStartTargetNew StartTarget { get; set; } = SnoopStartTargetNew.SnoopUI;
+        public BasicProcInjectorStartTargetNew StartTarget { get; set; } = BasicProcInjectorStartTargetNew.SnoopUI;
 
         public MultipleAppDomainModeNew MultipleAppDomainMode { get; set; } = MultipleAppDomainModeNew.Ask;
 
@@ -28,7 +28,7 @@
 
         public bool EnableDiagnostics { get; set; } = true;
 
-        public string? SnoopInstallPath { get; set; } = Environment.GetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR);
+        public string? BasicProcInjectorInstallPath { get; set; } = Environment.GetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR);
 
         public string WriteToFile()
         {
@@ -59,7 +59,7 @@
             using var stream = new FileStream(settingsFile, FileMode.Open);
             Current = (TransientSettingsDataNew?)serializer.Deserialize(stream) ?? new TransientSettingsDataNew();
 
-            Environment.SetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR, Current.SnoopInstallPath, EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(SettingsHelperNew.SNOOP_INSTALL_PATH_ENV_VAR, Current.BasicProcInjectorInstallPath, EnvironmentVariableTarget.Process);
 
             return Current;
         }
@@ -82,7 +82,7 @@
     }
 
     [PublicAPI]
-    public enum SnoopStartTargetNew
+    public enum BasicProcInjectorStartTargetNew
     {
         SnoopUI = 0,
         Zoomer = 1

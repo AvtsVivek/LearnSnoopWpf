@@ -22,25 +22,34 @@
 
             var assemblyName = methodInfo.DeclaringType!.Assembly.GetName().Name;
 
+            var fullAssemblyPath = Assembly.GetExecutingAssembly().Location;
+
             var className = methodInfo.DeclaringType.FullName!;
 
-            string transientSettingsFile = this.GetTransientSettingsFile(SnoopStartTargetNew.SnoopUI, targetHwnd);
+            string transientSettingsFile = this.GetTransientSettingsFile(BasicProcInjectorStartTargetNew.SnoopUI, targetHwnd);
 
             var injectorData = new InjectorDataNew
             {
-                FullAssemblyPath = assemblyName!,
+                FullAssemblyPath = fullAssemblyPath,
                 ClassName = className,
                 MethodName = methodInfo.Name,
                 SettingsFile = transientSettingsFile
             };
 
+            //        C:\Trials\LearnSnoopWpf\src\apps\100500 - BasicProcInjector\BasicProcInjector.WpfInjectorHost\bin\Debug\Snoop.Core.dll
+            //Snoop.Infrastructure.SnoopManager.StartSnoop
+            // C:\Trials\LearnSnoopWpf\src\apps\100200-SnoopSc\bin\Debug\net6.0-windows
+            injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100200-SnoopSc\bin\Debug\net6.0-windows\Snoop.Core.dll";
+            // injectorData.FullAssemblyPath = @"C:\Trials\LearnSnoopWpf\src\apps\100500-BasicProcInjector\BasicProcInjector.WpfInjectorHost\bin\Debug\Snoop.Core.dll";
+            injectorData.ClassName = "Snoop.Infrastructure.SnoopManager";
+            injectorData.MethodName = "StartSnoop";
             Injector.InjectIntoProcess(processWrapper, injectorData);
         }
 
         public AttachResultNew StartSnoopProcess(int processId, IntPtr targetHwnd)
         {
             var processInfo = new ProcessInfoNew(processId);
-            string transientSettingsFile = this.GetTransientSettingsFile(SnoopStartTargetNew.SnoopUI, targetHwnd);
+            string transientSettingsFile = this.GetTransientSettingsFile(BasicProcInjectorStartTargetNew.SnoopUI, targetHwnd);
             try
             {
                 MethodInfo methodInfo = typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!;
@@ -148,7 +157,7 @@
             return new AttachResultNew();
         }
 
-        public string GetTransientSettingsFile(SnoopStartTargetNew startTarget, IntPtr targetWindowHandle)
+        public string GetTransientSettingsFile(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
         {
             var settings = new SettingsSnoopNew().Load();
 

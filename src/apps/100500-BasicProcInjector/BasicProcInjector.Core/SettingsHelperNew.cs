@@ -10,7 +10,7 @@
 #pragma warning disable SA1310
         public const string SNOOP_INSTALL_PATH_ENV_VAR = "SNOOP_INSTALL_PATH";
         public const string SNOOP_SETTINGS_PATH_ENV_VAR = "SNOOP_SETTINGS_PATH";
-        public const string SNOOP_SETTINGS_DIRECTORY_NAME = ".Snoop";
+        public const string SNOOP_SETTINGS_DIRECTORY_NAME = ".BasicProcInjector";
         public const string DEFAULT_APPLICATION_SETTINGS_FILENAME = "DefaultSettings.xml";
 #pragma warning restore SA1310
 
@@ -19,9 +19,9 @@
             return GetPotentialSettingsPaths().First();
         }
 
-        public static string GetSettingsFileForSnoop()
+        public static string GetSettingsFileForBasicProcInjector()
         {
-            var file = "SnoopSettings.xml";
+            var file = "BasicProcInjectorSettings.xml";
             return FindExistingSettingsFile(file)
                    ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
         }
@@ -128,7 +128,7 @@
 
             // 4. AppData
             {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Snoop");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BasicProcInjector");
 
                 // Don't check for existence here
                 yield return path;

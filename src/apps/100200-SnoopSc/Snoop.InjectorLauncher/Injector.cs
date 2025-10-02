@@ -316,7 +316,10 @@ public static class Injector
                         LogMessage("##############################################");
                         LogMessage("Log from injector component:");
                         LogMessage("##############################################");
-                        LogMessage(File.ReadAllText(tempLogFile));
+                        var tempLogFileText = File.ReadAllText(tempLogFile);
+                        CopyStuffToClipBoard(tempLogFileText);
+                        MessageBox.Show($"100055: {tempLogFileText}");
+                        LogMessage(tempLogFileText);
                         LogMessage("##############################################");
 
                         if (resultFromExecuteInDefaultAppDomain != IntPtr.Zero)

@@ -19,7 +19,7 @@ using Snoop.InjectorLauncher;
 /// </summary>
 public static class InjectorLauncherManager
 {
-    public static void Launch(ProcessInfo processInfo, IntPtr targetHwnd, MethodInfo methodInfo, TransientSettingsData transientSettingsData)
+    public static void Launch(ProcessInfo processInfo, IntPtr targetHwnd, MethodInfo methodInfo, TransientSettingsDataNew transientSettingsData)
     {
         Launch(processInfo, targetHwnd, methodInfo.DeclaringType!.Assembly.GetName().Name, methodInfo.DeclaringType.FullName!, methodInfo.Name, transientSettingsData.WriteToFile());
     }

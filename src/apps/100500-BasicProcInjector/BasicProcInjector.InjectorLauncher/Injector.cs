@@ -28,7 +28,7 @@ public static class Injector
             Directory.CreateDirectory(applicationDataPath);
         }
 
-        var pathname = Path.Combine(applicationDataPath, "SnoopLog.txt");
+        var pathname = Path.Combine(applicationDataPath, "BasicProcInjectorLog.txt");
 
         if (append == false)
         {
@@ -59,7 +59,7 @@ public static class Injector
     // [PublicAPI]
     public static void InjectIntoProcess(ProcessWrapper processWrapper, InjectorDataNew injectorData)
     {
-        InjectSnoop(processWrapper, injectorData);
+        StartBasicProcInjector(processWrapper, injectorData);
     }
 
     /// <summary>
@@ -213,9 +213,9 @@ public static class Injector
         return true;
     }
 
-    private static void InjectSnoop(ProcessWrapper processWrapper, InjectorDataNew injectorData)
+    private static void StartBasicProcInjector(ProcessWrapper processWrapper, InjectorDataNew injectorData)
     {
-        var injectorDllName = $"Snoop.GenericInjector.{processWrapper.Architecture}.dll";
+        var injectorDllName = $"BasicProcInjector.CppInjectorCore.{processWrapper.Architecture}.dll";
         var pathToInjectorDll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, injectorDllName);
 
         LogMessage($"Trying to load \"{pathToInjectorDll}\"...");
@@ -314,9 +314,10 @@ public static class Injector
                         LogMessage("##############################################");
                         LogMessage("Log from injector component:");
                         LogMessage("##############################################");
-                        LogMessage(File.ReadAllText(tempLogFile));
+                        var tempLogFileText = File.ReadAllText(tempLogFile);
+                        LogMessage(tempLogFileText);
+                        CopyStuffToClipBoard(tempLogFileText);
                         LogMessage("##############################################");
-
                         if (resultFromExecuteInDefaultAppDomain != IntPtr.Zero)
                         {
                             throw Marshal.GetExceptionForHR((int)resultFromExecuteInDefaultAppDomain.ToInt64()) ?? new Exception("Unknown error while executing in foreign process.");

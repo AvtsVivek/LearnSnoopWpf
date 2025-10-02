@@ -9,6 +9,7 @@
     using System.Windows.Threading;
     using JetBrains.Annotations;
     using BasicProcInjector.Core;
+    using System.IO;
 
     [Serializable]
     public class SnoopCrossAppDomainInjectorNew : MarshalByRefObject
@@ -47,6 +48,8 @@
         [PublicAPI]
         public static int StartSnoop(string settingsFile)
         {
+            var settingsFileText = File.ReadAllText(settingsFile);
+            MessageBox.Show($"Starting Snoop. Here we go...{settingsFileText}");
             try
             {
                 return new SnoopManagerNew().StartSnoopInstance(settingsFile)
@@ -239,7 +242,7 @@
             return null;
         }
 
-        private static Func<SnoopMainBaseWindowNew> GetInstanceCreator(SnoopStartTargetNew startTarget)
+        private static Func<SnoopMainBaseWindowNew> GetInstanceCreator(BasicProcInjectorStartTargetNew startTarget)
         {
             switch (startTarget)
             {

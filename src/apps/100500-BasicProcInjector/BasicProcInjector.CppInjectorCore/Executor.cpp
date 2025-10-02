@@ -72,6 +72,11 @@ extern "C" __declspec(dllexport) int STDMETHODVCALLTYPE ExecuteInDefaultAppDomai
 			LogHelper::WriteLine(L"Message: %s", err.ErrorMessage());
 			LogHelper::WriteLine(L"Description: %s", std::wstring(err.Description(), SysStringLen(err.Description())).c_str());
 		}
+		else
+		{
+			LogHelper::WriteLine(L"Done calling '%s' on '%s' from '%s' with '%s'", method.c_str(), className.c_str(), assemblyPath.c_str(), parameter.c_str());
+		}
+
 
 		return hr;
 	}

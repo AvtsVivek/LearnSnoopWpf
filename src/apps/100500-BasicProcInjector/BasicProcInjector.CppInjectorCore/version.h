@@ -11,7 +11,7 @@
 #define VER_PRODUCTNAME_STR         "Snoop"
 #define VER_PRODUCT_VERSION         VER_FILE_VERSION
 #define VER_PRODUCT_VERSION_STR     STRINGIZE(InformationalVersion)
-#define VER_ORIGINAL_FILENAME_STR   "Snoop.GenericInjector.dll"
+#define VER_ORIGINAL_FILENAME_STR   "BasicProcInjector.CppInjectorCore.dll"
 #define VER_INTERNAL_NAME_STR       VER_ORIGINAL_FILENAME_STR
 #define VER_COPYRIGHT_STR           "Copyright © Cory Plotts, Bastian Schmidt 2010 - 2023"
 #define VER_COMPANY_STR             "https://github.com/snoopwpf/snoopwpf"

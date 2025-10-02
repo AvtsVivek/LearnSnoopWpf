@@ -44,6 +44,8 @@
 
                 // var result = this.snoopClient.StartSnoopProcess(processId, windowHandle);
 
+
+
                 this.snoopClient.StartSnoopProcessNew(processId, windowHandle);
 
                 //if (result?.Success == false)

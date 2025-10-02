@@ -9,11 +9,11 @@ using Snoop.Core;
 using Snoop.Infrastructure;
 
 [PublicAPI]
-public sealed class TransientSettingsData
+public sealed class TransientSettingsDataNew
 {
-    private static readonly XmlSerializer serializer = new(typeof(TransientSettingsData));
+    private static readonly XmlSerializer serializer = new(typeof(TransientSettingsDataNew));
 
-    public static TransientSettingsData? Current { get; private set; }
+    public static TransientSettingsDataNew? Current { get; private set; }
 
     public SnoopStartTarget StartTarget { get; set; } = SnoopStartTarget.SnoopUI;
 
@@ -45,7 +45,7 @@ public sealed class TransientSettingsData
         return settingsFile;
     }
 
-    public static TransientSettingsData LoadCurrentIfRequired(string settingsFile)
+    public static TransientSettingsDataNew LoadCurrentIfRequired(string settingsFile)
     {
         if (Current is not null)
         {
@@ -55,12 +55,12 @@ public sealed class TransientSettingsData
         return LoadCurrent(settingsFile);
     }
 
-    public static TransientSettingsData LoadCurrent(string settingsFile)
+    public static TransientSettingsDataNew LoadCurrent(string settingsFile)
     {
         LogHelper.WriteLine($"Loading transient settings file from \"{settingsFile}\"");
 
         using var stream = new FileStream(settingsFile, FileMode.Open);
-        Current = (TransientSettingsData?)serializer.Deserialize(stream) ?? new TransientSettingsData();
+        Current = (TransientSettingsDataNew?)serializer.Deserialize(stream) ?? new TransientSettingsDataNew();
 
         Environment.SetEnvironmentVariable(SettingsHelper.SNOOP_INSTALL_PATH_ENV_VAR, Current.SnoopInstallPath, EnvironmentVariableTarget.Process);
 

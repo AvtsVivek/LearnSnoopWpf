@@ -477,7 +477,7 @@ public partial class PropertyInspector : INotifyPropertyChanged
         var assemblyLocation = assembly.Location;
 
         if (string.IsNullOrEmpty(assemblyLocation)
-            || PathHelper.TryFindPathOnPath(TransientSettingsData.Current?.ILSpyPath, "ilspy.exe", out var ilspyPath) == false)
+            || PathHelper.TryFindPathOnPath(TransientSettingsDataNew.Current?.ILSpyPath, "ilspy.exe", out var ilspyPath) == false)
         {
             return;
         }
@@ -506,7 +506,7 @@ public partial class PropertyInspector : INotifyPropertyChanged
     private void CanOpenTypeInILSpy(object sender, CanExecuteRoutedEventArgs e)
     {
         e.CanExecute = e.Parameter is System.Type or BindableType
-                       && PathHelper.TryFindPathOnPath(TransientSettingsData.Current?.ILSpyPath, "ilspy.exe", out _);
+                       && PathHelper.TryFindPathOnPath(TransientSettingsDataNew.Current?.ILSpyPath, "ilspy.exe", out _);
     }
 
     private void CanUpdateBindingError(object sender, CanExecuteRoutedEventArgs e)

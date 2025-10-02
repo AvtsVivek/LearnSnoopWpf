@@ -36,7 +36,7 @@
             {
                 InjectorLauncherManagerNew.Launch(this, targetHwnd,
                     typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!,
-                    CreateTransientSettingsData(SnoopStartTargetNew.SnoopUI, targetHwnd));
+                    CreateTransientSettingsData(BasicProcInjectorStartTargetNew.SnoopUI, targetHwnd));
             }
             catch (Exception e)
             {
@@ -64,7 +64,7 @@
             {
                 InjectorLauncherManagerNew.Launch(this, targetHwnd,
                     typeof(SnoopManagerNew).GetMethod(nameof(SnoopManagerNew.StartSnoop))!,
-                    CreateTransientSettingsData(SnoopStartTargetNew.Zoomer, targetHwnd));
+                    CreateTransientSettingsData(BasicProcInjectorStartTargetNew.Zoomer, targetHwnd));
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@
             return new AttachResultNew();
         }
 
-        private static TransientSettingsDataNew CreateTransientSettingsData(SnoopStartTargetNew startTarget, IntPtr targetWindowHandle)
+        private static TransientSettingsDataNew CreateTransientSettingsData(BasicProcInjectorStartTargetNew startTarget, IntPtr targetWindowHandle)
         {
             var settings = SettingsSnoopNew.Default;
 

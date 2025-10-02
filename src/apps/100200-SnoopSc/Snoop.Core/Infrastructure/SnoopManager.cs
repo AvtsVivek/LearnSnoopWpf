@@ -2,6 +2,7 @@ namespace Snoop.Infrastructure;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -31,7 +32,7 @@ public class SnoopCrossAppDomainInjector : MarshalByRefObject
 
     private void RunInCurrentAppDomain(string settingsFile)
     {
-        var settingsData = TransientSettingsData.LoadCurrentIfRequired(settingsFile);
+        var settingsData = TransientSettingsDataNew.LoadCurrentIfRequired(settingsFile);
         new SnoopManager().RunInCurrentAppDomain(settingsData);
     }
 }
@@ -41,7 +42,7 @@ public class SnoopManager
     /// <summary>
     /// This is the main entry point being called by the GenericInjector.
     /// </summary>
-    /// <param name="settingsFile">Full path to a file containing our <see cref="TransientSettingsData"/>.</param>
+    /// <param name="settingsFile">Full path to a file containing our <see cref="TransientSettingsDataNew"/>.</param>
     /// <returns>
     /// <c>0</c> if the injection succeeded.
     /// <c>1</c> if the injection failed with an error.
@@ -49,6 +50,8 @@ public class SnoopManager
     [PublicAPI]
     public static int StartSnoop(string settingsFile)
     {
+        var settingsFileText = File.ReadAllText(settingsFile);
+        MessageBox.Show($"Starting Snoop. Here we go...{settingsFileText}");
         try
         {
             return new SnoopManager().StartSnoopInstance(settingsFile)
@@ -57,6 +60,7 @@ public class SnoopManager
         }
         catch (Exception exception)
         {
+            MessageBox.Show($"Failed to start Snoop.{Environment.NewLine}{exception.ToString()}");
             LogHelper.WriteError(exception);
             return 1;
         }
@@ -66,7 +70,7 @@ public class SnoopManager
     {
         LogHelper.WriteLine("Starting snoop...");
 
-        var settingsData = TransientSettingsData.LoadCurrent(settingsFile);
+        var settingsData = TransientSettingsDataNew.LoadCurrent(settingsFile);
 
         IList<AppDomain>? appDomains = null;
 
@@ -169,7 +173,7 @@ public class SnoopManager
         return succeeded;
     }
 
-    public bool RunInCurrentAppDomain(TransientSettingsData settingsData)
+    public bool RunInCurrentAppDomain(TransientSettingsDataNew settingsData)
     {
         LogHelper.WriteLine($"Trying to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\"...");
 
@@ -249,7 +253,7 @@ public class SnoopManager
         }
     }
 
-    private static SnoopMainBaseWindow CreateSnoopWindow(TransientSettingsData settingsData, DispatcherRootObjectPair dispatcherRootObjectPair, Func<SnoopMainBaseWindow> instanceCreator)
+    private static SnoopMainBaseWindow CreateSnoopWindow(TransientSettingsDataNew settingsData, DispatcherRootObjectPair dispatcherRootObjectPair, Func<SnoopMainBaseWindow> instanceCreator)
     {
         var snoopWindow = instanceCreator();
 
@@ -294,7 +298,7 @@ public class SnoopManager
         return string.Empty;
     }
 
-    private static bool InjectSnoopIntoDispatchers(TransientSettingsData settingsData, Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator)
+    private static bool InjectSnoopIntoDispatchers(TransientSettingsDataNew settingsData, Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator)
     {
         // Check and see if any of the PresentationSources have different dispatchers.
         // If so, ask the user if they wish to enter multiple dispatcher mode.
@@ -418,16 +422,16 @@ public class SnoopManager
 
     private class DispatchOutParameters
     {
-        public DispatchOutParameters(TransientSettingsData settingsData, Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator, List<DispatcherRootObjectPair> dispatcherRootObjectPairs)
+        public DispatchOutParameters(TransientSettingsDataNew settingsData, Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator, List<DispatcherRootObjectPair> dispatcherRootObjectPairs)
         {
             this.SettingsData = settingsData;
             this.InstanceCreator = instanceCreator;
             this.DispatcherRootObjectPairs = dispatcherRootObjectPairs;
         }
 
-        public TransientSettingsData SettingsData { get; }
+        public TransientSettingsDataNew SettingsData { get; }
 
-        public Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindow> InstanceCreator { get; }
+        public Func<TransientSettingsDataNew, DispatcherRootObjectPair, SnoopMainBaseWindow> InstanceCreator { get; }
 
         public List<DispatcherRootObjectPair> DispatcherRootObjectPairs { get; }
     }
