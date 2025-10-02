@@ -11,7 +11,7 @@
     <!--<RollForward>Major</RollForward> --><!-- can be removed as soon as we build with net6.0 -->
     
     <!--<ApplicationIcon>.\Snoop.ico</ApplicationIcon>-->
-	  <!--<ApplicationManifest>../Shared/app.manifest</ApplicationManifest>-->
+	<!--<ApplicationManifest>../Shared/app.manifest</ApplicationManifest>-->
   </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
@@ -19,7 +19,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\BasicProcInjector.Core\BasicProcInjector.Core.csproj" />
-		<ProjectReference Include="..\Snoop.Core\Snoop.Core.csproj" />
+	  <ProjectReference Include="..\BasicProcInjector.MalDll\BasicProcInjector.MalDll.csproj" />
+      <ProjectReference Include="..\Snoop.Core\Snoop.Core.csproj" />
 	</ItemGroup>
 
   <!--<PropertyGroup>

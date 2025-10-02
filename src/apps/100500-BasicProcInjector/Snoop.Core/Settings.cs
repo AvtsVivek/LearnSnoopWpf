@@ -157,7 +157,7 @@ public sealed class Settings : SettingsBase<Settings>
     }
 }
 
-[PublicAPI]
+// [PublicAPI]
 public enum ThemeMode
 {
     Auto = 0,

@@ -15,6 +15,21 @@
         public MainWindow()
         {
             this.InitializeComponent();
+
+            if(string.IsNullOrWhiteSpace(AppSettings.Default.FirstOrSecond))
+            {
+                AppSettings.Default.FirstOrSecond = "First";
+                AppSettings.Default.Save();
+            }
+
+            if (AppSettings.Default.FirstOrSecond == "Second")
+            {
+                this.SecondRadioButton.IsChecked = true;
+            }
+            else
+            {
+                this.FirstRadioButton.IsChecked = true;
+            }
         }
 
         private void StartSnoopButton_Click(object sender, RoutedEventArgs e)
@@ -48,6 +63,21 @@
             {
                 MessageBox.Show(this, "Could not get a valid process ID from the clipboard.", "Could not start snoop", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void FirstSecondRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender == this.FirstRadioButton)
+            {
+                this.FirstRadioButton.IsChecked = true;
+            }
+            else
+            {
+                this.SecondRadioButton.IsChecked = true;
+            }
+
+            AppSettings.Default.FirstOrSecond = sender == this.FirstRadioButton ? "First" : "Second";
+            AppSettings.Default.Save();
         }
     }
 }

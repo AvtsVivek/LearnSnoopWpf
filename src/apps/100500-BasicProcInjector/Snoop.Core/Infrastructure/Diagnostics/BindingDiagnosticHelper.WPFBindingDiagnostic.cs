@@ -85,7 +85,7 @@ namespace Snoop.Infrastructure.Diagnostics
         }
     }
 
-    [PublicAPI]
+    // [PublicAPI]
     public class FailedBinding
     {
         private readonly ObservableCollection<FailedBindingDetail> failedBindingDetails;
@@ -124,7 +124,7 @@ namespace Snoop.Infrastructure.Diagnostics
         }
     }
 
-    [PublicAPI]
+    // [PublicAPI]
     public class FailedBindingDetail
     {
         public FailedBindingDetail(FailedBinding failedBinding, TraceEventType eventType, int code, string message, params object[]? parameters)

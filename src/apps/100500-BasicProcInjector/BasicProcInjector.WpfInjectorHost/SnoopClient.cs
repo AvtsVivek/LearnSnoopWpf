@@ -5,6 +5,7 @@
     using BasicProcInjector.Core;
     using BasicProcInjector.InjectorLauncher;
     using Snoop.Infrastructure;
+    using BasicProcInjector.MalDll;
 
     internal class SnoopClient
     {
@@ -16,13 +17,25 @@
         {
             var processWrapper = ProcessWrapper.From(processId, targetHwnd);
 
-            MethodInfo methodInfo = typeof(SnoopManager).GetMethod(nameof(SnoopManager.StartSnoop))!;
+            MethodInfo methodInfo = null!;
+
+            string snoopAssemblyPath = null!;
+
+            if (AppSettings.Default.FirstOrSecond == "First")
+            {
+                methodInfo = typeof(SnoopManager).GetMethod(nameof(SnoopManager.StartSnoop))!;
+                snoopAssemblyPath = Assembly.GetAssembly(typeof(SnoopManager))!.Location;
+            }
+            else
+            {
+                methodInfo = typeof(StartClass).GetMethod(nameof(StartClass.StartMethod))!;
+                snoopAssemblyPath = Assembly.GetAssembly(typeof(StartClass))!.Location;
+            }
+
 
             var assemblyName = methodInfo.DeclaringType!.Assembly.GetName().Name;
 
             var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
-
-            var snoopAssemblyPath = Assembly.GetAssembly(typeof(SnoopManager))!.Location;
 
             var className = methodInfo.DeclaringType.FullName!;
 

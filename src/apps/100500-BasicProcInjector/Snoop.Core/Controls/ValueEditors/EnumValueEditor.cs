@@ -57,7 +57,7 @@ public class EnumValueEditor : ValueEditor
     }
 }
 
-[PublicAPI]
+// [PublicAPI]
 public class EnumValueWrapper : INotifyPropertyChanged
 {
 #pragma warning disable CS0067

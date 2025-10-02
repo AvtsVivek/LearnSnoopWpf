@@ -144,7 +144,7 @@ public class BindingLeakDiagnosticProvider : DiagnosticProvider
 
     // Code idea, for looking into ReflectTypeDescriptionProvider, taken from https://faithlife.codes/blog/2008/10/detecting_bindings_that_should_be_onetime/
     // Credit goes to Bradley Grainger (https://github.com/bgrainger)
-    [PublicAPI]
+    // [PublicAPI]
     public sealed class ReflectPropertyDescriptorInfo : IEquatable<ReflectPropertyDescriptorInfo>, IComparable<ReflectPropertyDescriptorInfo>
     {
         public ReflectPropertyDescriptorInfo(string typeName, string propertyName, IDictionary valueChangedHandlers)

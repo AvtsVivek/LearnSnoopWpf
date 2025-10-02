@@ -9,8 +9,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" HorizontalAlignment="Left" >
+            <RadioButton Margin="5" Background="Transparent" Content="First" Tag="First" Name="FirstRadioButton" 
+                         GroupName="ModeSelection" Click="FirstSecondRadioButton_Click" />
+            <RadioButton Margin="5" Background="Transparent" Content="Second" Tag="Second" Name="SecondRadioButton" 
+                         GroupName="ModeSelection" Click="FirstSecondRadioButton_Click" />
+        </StackPanel>
         <Button x:Name="startSnoopButton" Margin="10" FontSize="25" Grid.Row="1" Content="Start Snoop" Click="StartSnoopButton_Click" />        
     </Grid>
 </Window>

@@ -46,7 +46,7 @@ public class SnoopManager
     /// <c>0</c> if the injection succeeded.
     /// <c>1</c> if the injection failed with an error.
     /// <c>2</c> if the injection succeeded, but we couldn't find anything for snooping.</returns>
-    [PublicAPI]
+    // [PublicAPI]
     public static int StartSnoop(string settingsFile)
     {
         try

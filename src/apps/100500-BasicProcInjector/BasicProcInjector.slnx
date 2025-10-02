@@ -9,6 +9,7 @@
   <Project Path="BasicProcInjector.Core/BasicProcInjector.Core.csproj" />
   <Project Path="BasicProcInjector.CppInjectorCore/BasicProcInjector.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
   <Project Path="BasicProcInjector.InjectorLauncher/BasicProcInjector.InjectorLauncher.csproj" />
+  <Project Path="BasicProcInjector.MalDll/BasicProcInjector.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
   <Project Path="BasicProcInjector.WpfInjectorHost/BasicProcInjector.WpfInjectorHost.csproj" />
   <Project Path="Snoop.Core/Snoop.Core.csproj" />
 </Solution>
