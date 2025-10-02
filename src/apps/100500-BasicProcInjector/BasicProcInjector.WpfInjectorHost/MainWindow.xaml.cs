@@ -42,21 +42,7 @@
 
                 var processWrapper = ProcessWrapper.From(processId, windowHandle);
 
-                // var result = this.snoopClient.StartSnoopProcess(processId, windowHandle);
-
-
-
                 this.snoopClient.StartSnoopProcessNew(processId, windowHandle);
-
-                //if (result?.Success == false)
-                //{
-                //    MessageBox.Show(this, $"Could not start snoop for the specified process ID {processId}." +
-                //        Environment.NewLine +
-                //        $"{result.AttachException}", "Could not start snoop", MessageBoxButton.OK, MessageBoxImage.Error);
-                //}
-
-
-
             }
             else
             {
