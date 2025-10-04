@@ -240,7 +240,8 @@ public class SnoopManager
         switch (startTarget)
         {
             case SnoopStartTarget.SnoopUI:
-                return () => new SnoopUI();
+                // return () => new SnoopUI();
+                return () => new SimpleWindow();
 
             case SnoopStartTarget.Zoomer:
                 return () => new Zoomer();

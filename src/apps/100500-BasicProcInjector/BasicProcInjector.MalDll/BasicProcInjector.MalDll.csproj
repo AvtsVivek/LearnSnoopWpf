@@ -7,6 +7,20 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Snoop.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BasicProcInjector.Core\BasicProcInjector.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Snoop.ico" />
+  </ItemGroup>
 
 </Project>
