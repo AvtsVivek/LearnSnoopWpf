@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:BasicProcInjector.MalDll.Windows"
         mc:Ignorable="d"
         Title="InjectedWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <TextBlock HorizontalAlignment="Center" x:Name="secondTextBox" Margin="10" FontSize="25" >Process Id:</TextBlock>
+            <TextBlock HorizontalAlignment="Center" x:Name="resultTextBox" Margin="10" FontSize="25" >0</TextBlock>
+    </StackPanel>
 </local:SnoopMainBaseWindow>

@@ -1,14 +1,19 @@
-﻿namespace BasicProcInjector.MalDll.Windows
+﻿using System.Diagnostics;
+
+namespace BasicProcInjector.MalDll.Windows
 {
     /// <summary>
     /// Interaction logic for InjectedWindow.xaml
     /// </summary>
     public partial class InjectedWindow
     {
+        private readonly Process _currentProcess;
         public InjectedWindow()
         {
             target = new();
             InitializeComponent();
+            _currentProcess = Process.GetCurrentProcess();
+            resultTextBox.Text = _currentProcess.Id.ToString();
         }
 
         private object target;
