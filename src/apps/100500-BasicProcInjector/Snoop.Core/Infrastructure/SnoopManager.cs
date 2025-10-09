@@ -240,8 +240,8 @@ public class SnoopManager
         switch (startTarget)
         {
             case SnoopStartTarget.SnoopUI:
-                // return () => new SnoopUI();
-                return () => new SimpleWindow();
+                return () => new SnoopUI();
+                // return () => new SimpleWindow();
 
             case SnoopStartTarget.Zoomer:
                 return () => new Zoomer();
@@ -296,6 +296,16 @@ public class SnoopManager
         return string.Empty;
     }
 
+    private static int GetPresentationSourcesCount()
+    {
+        int i = 0;
+        foreach (PresentationSource? presentationSource in PresentationSource.CurrentSources)
+        {
+            i++;
+        }
+        return i;
+    }
+
     private static bool InjectSnoopIntoDispatchers(TransientSettingsData settingsData, Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator)
     {
         // Check and see if any of the PresentationSources have different dispatchers.
@@ -304,6 +314,8 @@ public class SnoopManager
         // See http://snoopwpf.codeplex.com/workitem/6334 for more info.
 
         var dispatcherRootObjectPairs = new List<DispatcherRootObjectPair>();
+
+        MessageBox.Show("Presentation Source count is: " + GetPresentationSourcesCount().ToString());
 
         foreach (PresentationSource? presentationSource in PresentationSource.CurrentSources)
         {

@@ -19,6 +19,6 @@
             <TextBlock HorizontalAlignment="Center" x:Name="secondTextBox" Margin="10" FontSize="25" >Process Id: </TextBlock>
             <TextBlock HorizontalAlignment="Center" x:Name="resultTextBox" Margin="10" FontSize="25" >0</TextBlock>
         </StackPanel>
-        <Button x:Name="copyProcessIdButton" Margin="10" FontSize="25" Grid.Row="3" Content="Copy Process Id" Click="copyProcessIdButton_Click" />
+        <Button x:Name="copyProcessIdButton" Margin="10" FontSize="25" Grid.Row="3" Content="Copy Process Details" Click="copyProcessIdButton_Click" />
     </Grid>
 </Window>

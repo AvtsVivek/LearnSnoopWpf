@@ -13,7 +13,9 @@ namespace SimpleWpfOne
         {
             InitializeComponent();
             resultTextBox.Text = _currentProcess.Id.ToString();
-            CopyProcessIdToClipboard();
+            GetProcessDetailsAndCopyToClipboard();
+            // DataContext = new object();
+            DataContext = this;
         }
 
         private void plusButton_Click(object sender, RoutedEventArgs e)
@@ -24,11 +26,14 @@ namespace SimpleWpfOne
         }
         private void copyProcessIdButton_Click(object sender, RoutedEventArgs e)
         {
-            CopyProcessIdToClipboard();
+            GetProcessDetailsAndCopyToClipboard();
         }
-        private void CopyProcessIdToClipboard()
+        private void GetProcessDetailsAndCopyToClipboard()
         {
-            Clipboard.SetText(_currentProcess.Id.ToString());
+            var currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+            var processDetails = $"ProcessId{currentProcess.Id}-ProcessName{currentProcess.ProcessName}";
+            Clipboard.SetText(processDetails);
+            // Clipboard.SetText(_currentProcess.Id.ToString());
         }
     }
 }
