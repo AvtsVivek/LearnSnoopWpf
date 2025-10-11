@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="PresentationSourceWinFormsOne.Core/PresentationSourceWinFormsOne.Core.csproj" />
+  <Project Path="PresentationSourceWinFormsOne.CppInjectorCore/PresentationSourceWinFormsOne.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
+  <Project Path="PresentationSourceWinFormsOne.InjectorLauncher/PresentationSourceWinFormsOne.InjectorLauncher.csproj" />
+  <Project Path="PresentationSourceWinFormsOne.MalDll/PresentationSourceWinFormsOne.MalDll.csproj" />
+  <Project Path="PresentationSourceWinFormsOne.WinFormsUI/PresentationSourceWinFormsOne.WinFormsUI.csproj" Id="3a2aa3ee-fae7-4945-855a-e28a979ea6c7" />
+  <Project Path="PresentationSourceWinFormsOne.WpfInjectorHost/PresentationSourceWinFormsOne.WpfInjectorHost.csproj" />
+</Solution>
