@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
+using System.Windows.Media;
 
 namespace BasicProcInjector.MalDll
 {
@@ -267,7 +268,7 @@ namespace BasicProcInjector.MalDll
                 }
 
                 var presentationSourceDispatcher = presentationSource.Dispatcher;
-                var rootVisual = presentationSource.RunInDispatcher(() => presentationSource.RootVisual);
+                Visual rootVisual = presentationSource.RunInDispatcher(() => presentationSource.RootVisual);
 
                 object rootObject = rootVisual;
 

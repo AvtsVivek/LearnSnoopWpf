@@ -11,5 +11,6 @@
   <Project Path="BasicProcInjector.InjectorLauncher/BasicProcInjector.InjectorLauncher.csproj" />
   <Project Path="BasicProcInjector.MalDll/BasicProcInjector.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
   <Project Path="BasicProcInjector.WpfInjectorHost/BasicProcInjector.WpfInjectorHost.csproj" />
+  <Project Path="BasicProcInjector.WpfTargetUI/BasicProcInjector.WpfTargetUI.csproj" Id="96b48207-5820-4b19-9a0a-ff6e06a86e17" />
   <Project Path="Snoop.Core/Snoop.Core.csproj" />
 </Solution>
