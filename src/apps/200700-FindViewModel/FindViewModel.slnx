@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="FindViewModel.Core/FindViewModel.Core.csproj" />
+  <Project Path="FindViewModel.CppInjectorCore/FindViewModel.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
+  <Project Path="FindViewModel.InjectorLauncher/FindViewModel.InjectorLauncher.csproj" />
+  <Project Path="FindViewModel.MalDll/FindViewModel.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
+  <Project Path="FindViewModel.WpfInjectorHost/FindViewModel.WpfInjectorHost.csproj" />
+  <Project Path="FindViewModel.WpfTargetUI/FindViewModel.WpfTargetUI.csproj" Id="96b48207-5820-4b19-9a0a-ff6e06a86e17" />
+  <Project Path="Snoop.Core/Snoop.Core.csproj" />
+</Solution>

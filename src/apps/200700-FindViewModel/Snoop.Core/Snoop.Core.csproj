@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-windows</TargetFrameworks>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <RootNamespace>Snoop</RootNamespace>
+
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="..\Artwork\*.ico" />
+
+    <Content Include="Scripts\*.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Snoop.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_WpfCommonNetFxReference Remove="System.Windows.Controls.Ribbon" />
+  </ItemGroup>
+
+  <ItemGroup Label="PowerShell">
+    <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == '$(MinTargetFramework)'" />
+    <PackageReference Include="microsoft.powershell.3.referenceassemblies" Version="1.0.0" PrivateAssets="All" Condition="'$(TargetFramework)' == '$(MinTargetFramework)'" />
+
+    <PackageReference Include="System.Management.Automation" Version="7.5.3" PrivateAssets="All" Condition="'$(TargetFramework)' != '$(MinTargetFramework)'" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' != '$(MinTargetFramework)'">
+    <DefineConstants>$(DefineConstants);USE_WPF_BINDING_DIAG</DefineConstants>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Snoop.ico" />
+	</ItemGroup>
+	
+<Target Name="CustomMessageTarget" AfterTargets="Build">
+	<Message Text="This is a custom message from MSBuild during the build process" Importance="high" />
+	<Message Text="Target Framework is  $(TargetFramework)" Importance="high" />
+	<Message Text="Min Target Framework is  $(MinTargetFramework)" Importance="high" />
+	<Message Text="Min Core Target Framework is  $(MinCoreTargetFramework)" Importance="high" />
+	<Message Text="Target Frameworks is  $(TargetFrameworks)" Importance="high" />
+</Target>
+</Project>

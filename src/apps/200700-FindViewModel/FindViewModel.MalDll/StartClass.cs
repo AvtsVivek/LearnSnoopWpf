@@ -1,6 +1,6 @@
-﻿using BasicProcInjector.Core;
-using BasicProcInjector.MalDll.Infrastructure;
-using BasicProcInjector.MalDll.Windows;
+﻿using FindViewModel.Core;
+using FindViewModel.MalDll.Infrastructure;
+using FindViewModel.MalDll.Windows;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -9,7 +9,7 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Windows.Media;
 
-namespace BasicProcInjector.MalDll
+namespace FindViewModel.MalDll
 {
     [Serializable]
     public class SnoopCrossAppDomainInjectorNew : MarshalByRefObject
@@ -41,7 +41,7 @@ namespace BasicProcInjector.MalDll
         {
             // MessageBox.Show("Hello from MalDll! Settings file: " + settingsFile);
 
-            var dllPathToload = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "BasicProcInjector.Core.dll");
+            var dllPathToload = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "FindViewModel.Core.dll");
 
             if (File.Exists(dllPathToload))
             {
@@ -53,6 +53,16 @@ namespace BasicProcInjector.MalDll
                 // MessageBox.Show("DLL not found: " + dllPathToload);
             }
 
+            //string tempSettingsFileText = File.ReadAllText(settingsFile);
+
+            //if (string.IsNullOrWhiteSpace(tempSettingsFileText))
+            //{
+            //    MessageBox.Show("Settings file is empty!", "Error");
+            //    return 1;
+            //}
+
+            //MessageBox.Show(tempSettingsFileText, "Settings File");
+
             try
             {
                 var startClass = new StartClass();
@@ -62,6 +72,19 @@ namespace BasicProcInjector.MalDll
             {
                 MessageBox.Show(exception.ToString(), "Failed to start Snoop");
             }
+
+            //try
+            //{
+            //    return new StartClass().StartClassInstance(settingsFile)
+            //        ? 0
+            //        : 2;
+            //}
+            //catch (Exception exception)
+            //{
+            //    MessageBox.Show($"Failed to start Snoop.{Environment.NewLine}{exception.ToString()}");
+            //    LogHelper.WriteError(exception);
+            //    return 1;
+            //}
 
             return 0;
         }
@@ -92,6 +115,8 @@ namespace BasicProcInjector.MalDll
             else if (numberOfAppDomains == 1)
             {
                 LogHelper.WriteLine("Only found one app domain. Running in single app domain mode.");
+
+                // MessageBox.Show("Only found one app domain. Running in single app domain mode.");
 
                 succeeded = this.RunInCurrentAppDomain(settingsData);
             }
@@ -268,6 +293,8 @@ namespace BasicProcInjector.MalDll
                 }
             }
 
+            // MessageBox.Show($"dispatcherRootObjectPairs.Count is {dispatcherRootObjectPairs.Count}");
+
             var useMultipleDispatcherMode = false;
             if (dispatcherRootObjectPairs.Count <= 0)
             {
@@ -309,6 +336,8 @@ namespace BasicProcInjector.MalDll
                     }
             }
 
+            MessageBox.Show($"useMultipleDispatcherMode is {useMultipleDispatcherMode}");
+
             if (useMultipleDispatcherMode)
             {
                 SnoopModesNew.MultipleDispatcherMode = true;
@@ -320,11 +349,16 @@ namespace BasicProcInjector.MalDll
 
                 thread.Start(new DispatchOutParameters(settingsData, instanceCreator, dispatcherRootObjectPairs));
 
-                // todo: check if we really created something
                 return true;
             }
 
             var dispatcherRootObjectPairForInstanceCreation = dispatcherRootObjectPairs.FirstOrDefault(x => x.RootObject is Application) ?? dispatcherRootObjectPairs[0];
+
+            MessageBox.Show($"The type of dispatcherRootObjectPairForInstanceCreation.RootObject is " +
+                $"{dispatcherRootObjectPairForInstanceCreation.RootObject.GetType()}");
+
+            MessageBox.Show($"The type of dispatcherRootObjectPairForInstanceCreation.Dispatcher is " +
+                $"{dispatcherRootObjectPairForInstanceCreation.Dispatcher.GetType()}");
 
             dispatcherRootObjectPairForInstanceCreation.Dispatcher.Invoke((Action)(() =>
             {
@@ -365,22 +399,6 @@ namespace BasicProcInjector.MalDll
 
             return null;
         }
-
-        //private static Func<SnoopMainBaseWindow> GetInstanceCreator(SnoopStartTarget startTarget)
-        //{
-        //    return () => new InjectedWindow();
-        //    //switch (startTarget)
-        //    //{
-        //    //    case SnoopStartTarget.SnoopUI:
-        //    //        return () => new SnoopUI();
-
-        //    //    case SnoopStartTarget.Zoomer:
-        //    //        return () => new Zoomer();
-
-        //    //    default:
-        //    //        throw new ArgumentOutOfRangeException(nameof(startTarget), startTarget, null);
-        //    //}
-        //}
 
         private static Func<SnoopMainBaseWindow> GetInstanceCreator()
         {
