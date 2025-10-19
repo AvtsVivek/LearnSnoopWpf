@@ -60,7 +60,7 @@ namespace WpfControlTreeViewOne
                 var dispatcher = (rootObject as DispatcherObject)?.Dispatcher ?? presentationSourceDispatcher;
             }
 
-            ExtractVisualTree(rootObjects.First(), ControlTreeView);
+            ExtractVisualTree(rootObjects.First(), ControlTreeView, 0);
 
             if (presentationSourceCount == 0)
             {
@@ -70,7 +70,7 @@ namespace WpfControlTreeViewOne
             ExpandAllTreeViewItems(ControlTreeView);
         }
 
-        private void ExtractVisualTree(object parent, ItemsControl parentTreeViewItem)
+        private void ExtractVisualTree(object parent, ItemsControl parentTreeViewItem, int level)
         {
             DependencyObject dependencyObject = null!;
 
@@ -95,16 +95,18 @@ namespace WpfControlTreeViewOne
 
             var childrenCount = VisualTreeHelper.GetChildrenCount(dependencyObject);
 
+            level++;
+
             for (int i = 0; i < childrenCount; i++)
             {
                 var child = VisualTreeHelper.GetChild(dependencyObject, i);
                 var childTreeViewItem = new TreeViewItem
                 {
-                    Header = child.GetType().Name,
+                    Header = child.GetType().Name + " " + level,
                     Tag = child
                 };
                 parentTreeViewItem.Items.Add(childTreeViewItem);
-                ExtractVisualTree(child, childTreeViewItem);
+                ExtractVisualTree(child, childTreeViewItem, level);
             }
         }
 
