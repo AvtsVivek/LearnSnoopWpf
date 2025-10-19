@@ -1,9 +1,10 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace WpfControlTreeViewOne
+namespace WpfControlTreeViewUserControlTwo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -18,8 +19,6 @@ namespace WpfControlTreeViewOne
         private void BtnShowControlTree_Click(object sender, RoutedEventArgs e)
         {
             ControlTreeView.Items.Clear();
-
-            // var dispatcherRootObjectPairs = new List<DispatcherRootObjectPair>();
 
             var presentationSourceCount = 0;
 
@@ -98,13 +97,26 @@ namespace WpfControlTreeViewOne
             for (int i = 0; i < childrenCount; i++)
             {
                 var child = VisualTreeHelper.GetChild(dependencyObject, i);
-                var childTreeViewItem = new TreeViewItem
+
+                // Only add UserControls to the tree view
+                if (child is UserControl userControl)
                 {
-                    Header = child.GetType().Name,
-                    Tag = child
-                };
-                parentTreeViewItem.Items.Add(childTreeViewItem);
-                ExtractVisualTree(child, childTreeViewItem);
+                    var childTreeViewItem = new TreeViewItem
+                    {
+                        Header = userControl.GetType().Name,
+                        Tag = userControl
+                    };
+
+                    parentTreeViewItem.Items.Add(childTreeViewItem);
+
+                    // Optionally, recurse into the UserControl to find nested UserControls
+                    ExtractVisualTree(userControl, childTreeViewItem);
+                }
+                else
+                {
+                    // If you want to find nested UserControls, you can still recurse
+                    ExtractVisualTree(child, parentTreeViewItem);
+                }
             }
         }
 

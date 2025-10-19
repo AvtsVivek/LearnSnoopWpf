@@ -1,6 +1,7 @@
-﻿using System.Windows.Threading;
+﻿
+using System.Windows.Threading;
 
-namespace WpfControlTreeViewOne
+namespace WpfControlTreeViewUserControlTwo
 {
     public static class ExtensionMethods
     {
