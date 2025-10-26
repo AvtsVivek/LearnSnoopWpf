@@ -43,7 +43,6 @@ public static class Injector
         }
     }
 
-    // [PublicAPI]
     public static void InjectIntoProcess(IntPtr windowHandle, InjectorData injectorData)
     {
         var processFromHandle = ProcessWrapper.FromWindowHandle(windowHandle);
@@ -56,7 +55,6 @@ public static class Injector
         InjectIntoProcess(processFromHandle, injectorData);
     }
 
-    // [PublicAPI]
     public static void InjectIntoProcess(ProcessWrapper processWrapper, InjectorData injectorData)
     {
         StartFindViewModel(processWrapper, injectorData);
@@ -358,6 +356,7 @@ public static class Injector
         }
     }
 
+    // This is just for debugging. 
     public static void CopyStuffToClipBoard(string text)
     {
         Thread thread = new Thread(() => Clipboard.SetText(text));
