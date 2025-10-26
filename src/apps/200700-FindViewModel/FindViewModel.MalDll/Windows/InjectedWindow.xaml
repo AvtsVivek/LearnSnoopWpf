@@ -6,14 +6,37 @@
         xmlns:local="clr-namespace:FindViewModel.MalDll.Windows"
         mc:Ignorable="d"
         Title="InjectedWindow" Height="450" Width="800">
-    <StackPanel Orientation="Vertical">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-            <TextBlock HorizontalAlignment="Center" x:Name="secondTextBox" Margin="10" FontSize="25" >Process Id:</TextBlock>
-            <TextBlock HorizontalAlignment="Center" x:Name="resultTextBox" Margin="10" FontSize="25" >0</TextBlock>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Center" x:Name="secondTextBox" Margin="10" FontSize="25" >Process Id:</TextBlock>
+                <TextBlock HorizontalAlignment="Center" x:Name="resultTextBox" Margin="10" FontSize="25" >0</TextBlock>
+            </StackPanel>
+            <TextBlock HorizontalAlignment="Center" x:Name="spacerTextBox" Margin="10" FontSize="25" ></TextBlock>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Center" x:Name="secondProcessNameTextBox" Margin="10" FontSize="25" >Process Name:</TextBlock>
+                <TextBlock HorizontalAlignment="Center" x:Name="resultProcessNameTextBox" Margin="10" FontSize="25" ></TextBlock>
+            </StackPanel>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-            <TextBlock HorizontalAlignment="Center" x:Name="secondProcessNameTextBox" Margin="10" FontSize="25" >Process Name:</TextBlock>
-            <TextBlock HorizontalAlignment="Center" x:Name="resultProcessNameTextBox" Margin="10" FontSize="25" ></TextBlock>
-        </StackPanel>
-    </StackPanel>
+        <Grid Grid.Row="1" Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                <TreeView x:Name="ControlTreeView">
+                </TreeView>
+            </ScrollViewer>
+            <StackPanel Grid.Column="1" Margin="4" Orientation="Vertical" >
+                <Button x:Name="RefreshButton" Content="Refresh" Width="75" Margin="0,0,0,4" Click="RefreshButton_Click"/>
+                <Button x:Name="FindViewModelButton" Content="Find ViewModel" Width="100" Margin="0,0,0,4" Click="FindViewModelButton_Click"/>
+                <Button x:Name="ExpandAllButton" Content="Expand All" Width="75" Margin="0,0,0,4" Click="ExpandAllButton_Click"/>
+                <Button x:Name="CollapseAllButton" Content="Collapse All" Width="75" Margin="0,0,0,4" Click="CollapseAllButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
 </local:SnoopMainBaseWindow>

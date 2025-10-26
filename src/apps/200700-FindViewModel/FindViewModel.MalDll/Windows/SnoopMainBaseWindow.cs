@@ -20,7 +20,7 @@ namespace FindViewModel.MalDll.Windows
 
             this.RootObject = rootObject;
 
-            this.Load(rootObject);
+            this.LoadRootObject(rootObject);
 
             this.ownerWindow = SnoopWindowUtils.FindOwnerWindow(this);
 
@@ -71,6 +71,6 @@ namespace FindViewModel.MalDll.Windows
             base.OnClosed(e);
         }
 
-        protected abstract void Load(object rootToInspect);
+        protected abstract void LoadRootObject(object rootToInspect);
     }
 }

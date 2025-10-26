@@ -336,8 +336,6 @@ namespace FindViewModel.MalDll
                     }
             }
 
-            MessageBox.Show($"useMultipleDispatcherMode is {useMultipleDispatcherMode}");
-
             if (useMultipleDispatcherMode)
             {
                 SnoopModesNew.MultipleDispatcherMode = true;
@@ -354,11 +352,6 @@ namespace FindViewModel.MalDll
 
             var dispatcherRootObjectPairForInstanceCreation = dispatcherRootObjectPairs.FirstOrDefault(x => x.RootObject is Application) ?? dispatcherRootObjectPairs[0];
 
-            MessageBox.Show($"The type of dispatcherRootObjectPairForInstanceCreation.RootObject is " +
-                $"{dispatcherRootObjectPairForInstanceCreation.RootObject.GetType()}");
-
-            MessageBox.Show($"The type of dispatcherRootObjectPairForInstanceCreation.Dispatcher is " +
-                $"{dispatcherRootObjectPairForInstanceCreation.Dispatcher.GetType()}");
 
             dispatcherRootObjectPairForInstanceCreation.Dispatcher.Invoke((Action)(() =>
             {
