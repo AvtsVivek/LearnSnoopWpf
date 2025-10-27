@@ -14,10 +14,10 @@
         public const string DEFAULT_APPLICATION_SETTINGS_FILENAME = "DefaultSettings.xml";
 #pragma warning restore SA1310
 
-        public static string GetSettingsRootPath()
-        {
-            return GetPotentialSettingsPaths().First();
-        }
+        //public static string GetSettingsRootPath()
+        //{
+        //    return GetPotentialSettingsPaths().First();
+        //}
 
         public static string GetSettingsFileForProcInjectorNoSettingsFile()
         {
@@ -26,36 +26,36 @@
                    ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
         }
 
-        public static string GetDefaultApplicationSettingsFile()
-        {
-            var file = DEFAULT_APPLICATION_SETTINGS_FILENAME;
-            return FindExistingSettingsFile(file)
-                   ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
-        }
+        //public static string GetDefaultApplicationSettingsFile()
+        //{
+        //    var file = DEFAULT_APPLICATION_SETTINGS_FILENAME;
+        //    return FindExistingSettingsFile(file)
+        //           ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
+        //}
 
-        public static string GetApplicationSpecificSettingsFile()
-        {
-            var file = $"AppSettings\\{EnvironmentEx.CurrentProcessName}.xml";
-            return FindExistingSettingsFile(file)
-                ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
-        }
+        //public static string GetApplicationSpecificSettingsFile()
+        //{
+        //    var file = $"AppSettings\\{EnvironmentEx.CurrentProcessName}.xml";
+        //    return FindExistingSettingsFile(file)
+        //        ?? Path.Combine(GetPotentialSettingsPaths().First(), file);
+        //}
 
-        public static string GetSettingsFileForCurrentApplication()
-        {
-            // Try to find application specific settings
-            {
-                var settingsFile = GetApplicationSpecificSettingsFile();
+        //public static string GetSettingsFileForCurrentApplication()
+        //{
+        //    // Try to find application specific settings
+        //    {
+        //        var settingsFile = GetApplicationSpecificSettingsFile();
 
-                if (string.IsNullOrEmpty(settingsFile) == false
-                    && File.Exists(settingsFile))
-                {
-                    return settingsFile;
-                }
-            }
+        //        if (string.IsNullOrEmpty(settingsFile) == false
+        //            && File.Exists(settingsFile))
+        //        {
+        //            return settingsFile;
+        //        }
+        //    }
 
-            // Use default settings
-            return GetDefaultApplicationSettingsFile();
-        }
+        //    // Use default settings
+        //    return GetDefaultApplicationSettingsFile();
+        //}
 
         public static string? FindExistingSettingsFile(string file)
         {

@@ -11,30 +11,6 @@ using System.Windows.Media;
 
 namespace ProcInjectorNoSettingsFile.MalDll
 {
-    //[Serializable]
-    //public class SnoopCrossAppDomainInjectorNew : MarshalByRefObject
-    //{
-    //    public SnoopCrossAppDomainInjectorNew()
-    //    {
-    //        SnoopModesNew.MultipleAppDomainMode = true;
-
-    //        // We have to do this in the constructor because we might not be able to cast correctly.
-    //        // Not being able to cast might be the case if the app domain we should run in uses shadow copies for it's assemblies.
-    //        var settingsFile = Environment.GetEnvironmentVariable("Snoop.SettingsFile");
-
-    //        if (string.IsNullOrEmpty(settingsFile) == false)
-    //        {
-    //            this.RunInCurrentAppDomain(settingsFile);
-    //        }
-    //    }
-
-    //    private void RunInCurrentAppDomain(string settingsFile)
-    //    {
-    //        var settingsData = TransientSettingsData.LoadCurrentIfRequired(settingsFile);
-    //        new StartClass().RunInCurrentAppDomain(settingsData);
-    //    }
-    //}
-
     public class StartClass
     {
         public static int StartMethod(string settingsData)
@@ -44,17 +20,15 @@ namespace ProcInjectorNoSettingsFile.MalDll
             if (File.Exists(dllPathToload))
             {
                 var assembly = Assembly.LoadFrom(dllPathToload);
-                // MessageBox.Show("Loaded assembly: " + assembly.FullName);
             }
             else
             {
-                // MessageBox.Show("DLL not found: " + dllPathToload);
+
             }
 
             try
             {
                 var startClass = new StartClass();
-                // MessageBox.Show("Hello from MalDll! Settings file just before the problem: " + settingsData);
                 var isSuccess = startClass.StartClassInstance(settingsData);
             }
             catch (Exception exception)
@@ -65,11 +39,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
             return 0;
         }
 
-        private TransientSettingsData GetTransientSettingsDataFromSettingsFile(string settingsFile)
-        {
-            return TransientSettingsData.LoadCurrent(settingsFile);
-        }
-
         private TransientSettingsData GetTransientSettingsDataFromJsonString(string jsonString)
         {
             return TransientSettingsData.FromJson(jsonString);
@@ -78,8 +47,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
         private bool StartClassInstance(string settingsData)
         {
             LogHelper.WriteLine("Starting snoop...");
-
-            // var settingsData = GetTransientSettingsDataFromSettingsFile(settingsFile);
 
             var transientSettingsData = GetTransientSettingsDataFromJsonString(settingsData);
 
@@ -92,18 +59,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
             var numberOfAppDomains = appDomains?.Count ?? 1;
             var succeeded = false;
-
-            // MessageBox.Show($"numberOfAppDomains: {numberOfAppDomains}");
-
-            //if (numberOfAppDomains < 1)
-            //{
-            //    LogHelper.WriteLine("Snoop wasn't able to enumerate app domains or MultipleAppDomainMode was disabled. Trying to run in single app domain mode.");
-
-                //    MessageBox.Show("Snoop wasn't able to enumerate app domains or MultipleAppDomainMode was disabled. Trying to run in single app domain mode.");
-
-                //    succeeded = this.RunInCurrentAppDomain(settingsData);
-                //}
-                // else if (numberOfAppDomains == 1)
             
             if (numberOfAppDomains == 1)
             {
@@ -111,79 +66,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
                 succeeded = this.RunInCurrentAppDomain(transientSettingsData);
             }
-            //else
-            //{
-            //    LogHelper.WriteLine($"Found {numberOfAppDomains} app domains. Running in multiple app domain mode.");
-
-            //    MessageBox.Show($"Found {numberOfAppDomains} app domains. Running in multiple app domain mode.");
-
-            //    var shouldUseMultipleAppDomainMode = settingsData.MultipleAppDomainMode is MultipleAppDomainModeNew.Ask 
-            //        or MultipleAppDomainModeNew.AlwaysUse;
-            //    if (settingsData.MultipleAppDomainMode == MultipleAppDomainModeNew.Ask)
-            //    {
-            //        var result =
-            //            MessageBox.Show(
-            //                "Snoop has noticed multiple app domains.\n\n" +
-            //                "Would you like to enter multiple app domain mode, and have a separate Snoop window for each app domain?\n\n" +
-            //                "Without having a separate Snoop window for each app domain, you will not be able to Snoop the windows in the app domains outside of the main app domain.",
-            //                "Enter Multiple AppDomain Mode",
-            //                MessageBoxButton.YesNo,
-            //                MessageBoxImage.Question,
-            //                MessageBoxResult.No);
-
-            //        if (result != MessageBoxResult.Yes)
-            //        {
-            //            shouldUseMultipleAppDomainMode = false;
-            //        }
-            //    }
-
-            //    if (shouldUseMultipleAppDomainMode == false
-            //        || appDomains is null)
-            //    {
-            //        LogHelper.WriteLine("Running in single app domain mode.");
-
-            //        succeeded = this.RunInCurrentAppDomain(settingsData);
-            //    }
-            //    else
-            //    {
-            //        LogHelper.WriteLine("Running in multiple app domain mode.");
-
-            //        SnoopModesNew.MultipleAppDomainMode = true;
-
-            //        // Use environment variable to transport snoop settings file across multiple app domains
-            //        Environment.SetEnvironmentVariable("Snoop.SettingsFile", settingsFile, EnvironmentVariableTarget.Process);
-
-            //        var assemblyFullName = typeof(StartClass).Assembly.Location;
-
-            //        var fullInjectorClassName = typeof(SnoopCrossAppDomainInjectorNew).FullName;
-
-            //        MessageBox.Show($"Starting Snoop in multiple app domains...{fullInjectorClassName}");
-
-            //        foreach (var appDomain in appDomains)
-            //        {
-            //            LogHelper.WriteLine($"Trying to create Snoop instance in app domain \"{appDomain.FriendlyName}\"...");
-
-            //            try
-            //            {
-            //                AttachAssemblyResolveHandler(appDomain);
-
-            //                // the injection code runs inside the constructor of SnoopCrossAppDomainManager
-            //                appDomain.CreateInstanceFrom(assemblyFullName, fullInjectorClassName!);
-
-            //                // if there is no exception we consider the injection successful
-            //                var appDomainSucceeded = true;
-            //                succeeded = succeeded || appDomainSucceeded;
-
-            //                LogHelper.WriteLine($"Successfully created Snoop instance in app domain \"{appDomain.FriendlyName}\".");
-            //            }
-            //            catch (Exception exception)
-            //            {
-            //                LogHelper.WriteLine($"Failed to create Snoop instance in app domain \"{appDomain.FriendlyName}\".");
-            //                LogHelper.WriteError(exception);
-            //            }
-            //        }
-            //    }
-            // }
 
             if (succeeded == false)
             {
@@ -200,21 +82,16 @@ namespace ProcInjectorNoSettingsFile.MalDll
         {
             LogHelper.WriteLine($"Trying to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\"...");
 
-            // MessageBox.Show($"Trying to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\"...");
-
             try
             {
                 AttachAssemblyResolveHandler(AppDomain.CurrentDomain);
 
-                // var instanceCreator = GetInstanceCreator(settingsData.StartTarget);
                 var instanceCreator = GetInstanceCreator();
 
                 var result = InjectSnoopIntoDispatchers(settingsData, 
                     (data, dispatcherRootObjectPair) => CreateSnoopWindow(data, dispatcherRootObjectPair, instanceCreator));
 
                 LogHelper.WriteLine($"Successfully running Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\".");
-
-                // MessageBox.Show($"Successfully running Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
                 return result;
             }
@@ -249,8 +126,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
             // If so, ask the user if they wish to enter multiple dispatcher mode.
             // If they do, launch a snoop ui for every additional dispatcher.
             // See http://snoopwpf.codeplex.com/workitem/6334 for more info.
-
-            // MessageBox.Show(nameof(InjectSnoopIntoDispatchers));
 
             var dispatcherRootObjectPairs = new List<DispatcherRootObjectPair>();
 
@@ -384,22 +259,6 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
             return null;
         }
-
-        //private static Func<SnoopMainBaseWindow> GetInstanceCreator(SnoopStartTarget startTarget)
-        //{
-        //    return () => new InjectedWindow();
-        //    //switch (startTarget)
-        //    //{
-        //    //    case SnoopStartTarget.SnoopUI:
-        //    //        return () => new SnoopUI();
-
-        //    //    case SnoopStartTarget.Zoomer:
-        //    //        return () => new Zoomer();
-
-        //    //    default:
-        //    //        throw new ArgumentOutOfRangeException(nameof(startTarget), startTarget, null);
-        //    //}
-        //}
 
         private static Func<SnoopMainBaseWindow> GetInstanceCreator()
         {
