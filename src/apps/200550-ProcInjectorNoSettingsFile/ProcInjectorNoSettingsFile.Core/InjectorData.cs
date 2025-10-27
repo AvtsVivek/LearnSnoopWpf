@@ -8,8 +8,6 @@
 
         public string MethodName { get; set; } = string.Empty;
 
-        public string? SettingsFile { get; set; }
-
         public string? SettingsJson { get; set; }
     }
 }

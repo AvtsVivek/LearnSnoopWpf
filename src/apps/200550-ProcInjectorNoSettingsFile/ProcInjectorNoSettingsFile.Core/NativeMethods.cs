@@ -235,31 +235,6 @@
             }
         }
 
-        // see https://msdn.microsoft.com/en-us/library/windows/desktop/ms684139%28v=vs.85%29.aspx
-        private static bool IsWow64Process(Process process)
-        {
-            if (Environment.Is64BitOperatingSystem == false)
-            {
-                return false;
-            }
-
-            // if this method is not available in your version of .NET, use GetNativeSystemInfo via P/Invoke instead
-            using (var processHandle = OpenProcess(process, ProcessAccessFlags.QueryLimitedInformation))
-            {
-                if (processHandle.IsInvalid)
-                {
-                    throw new Exception("Could not query process information.");
-                }
-
-                if (IsWow64Process(processHandle.DangerousGetHandle(), out var isWow64) == false)
-                {
-                    throw new Win32Exception();
-                }
-
-                return isWow64 == false;
-            }
-        }
-
         public static bool IsProcessElevated(Process process)
         {
             using (var processHandle = OpenProcess(process, ProcessAccessFlags.QueryInformation))
@@ -273,18 +248,6 @@
 
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Similar to System.Diagnostics.WinProcessManager.GetModuleInfos,
-        /// except that we include 32 bit modules when Snoop runs in 64 bit mode.
-        /// See http://blogs.msdn.com/b/jasonz/archive/2007/05/11/code-sample-is-your-process-using-the-silverlight-clr.aspx
-        /// </summary>
-        public static IEnumerable<MODULEENTRY32> GetModulesFromWindowHandle(IntPtr windowHandle)
-        {
-            GetWindowThreadProcessId(windowHandle, out var processId);
-
-            return GetModules(processId);
         }
 
         /// <summary>
@@ -332,48 +295,6 @@
 
         [DllImport("user32.dll")]
         public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int processId);
-
-        [DllImport("Kernel32.dll")]
-        public static extern int GetProcessId(ProcessHandle processHandle);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsWindow(IntPtr hwnd);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsWindowVisible(IntPtr hwnd);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern int GetClassName(IntPtr hwnd, StringBuilder className, int maxCount);
-
-        public static string GetClassName(IntPtr hwnd)
-        {
-            // Pre-allocate 256 characters, since this is the maximum class name length.
-            var className = new StringBuilder(256);
-
-            //Get the window class name
-            var result = GetClassName(hwnd, className, className.Capacity);
-
-            return result != 0
-                ? className.ToString()
-                : string.Empty;
-        }
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern int GetWindowTextLength(IntPtr hWnd);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int maxCount);
-
-        public static string GetText(IntPtr hWnd)
-        {
-            // Allocate correct string length first
-            var length = GetWindowTextLength(hWnd);
-            var sb = new StringBuilder(length + 1);
-            GetWindowText(hWnd, sb, sb.Capacity);
-            return sb.ToString();
-        }
 
         [Flags]
         public enum ProcessAccessFlags : uint
@@ -486,30 +407,6 @@
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hHandle);
 
-        [DllImport("kernel32.dll")]
-        public static extern void GetCurrentThreadStackLimits(out IntPtr lowLimit, out IntPtr highLimit);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr LoadImage(IntPtr hinst, string lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
-
-        public static IntPtr GetWindowUnderMouse()
-        {
-            var pt = default(POINT);
-            if (GetCursorPos(ref pt))
-            {
-                return WindowFromPoint(pt);
-            }
-
-            return IntPtr.Zero;
-        }
-
-        //public static System.Windows.Rect GetWindowRect(IntPtr hwnd)
-        //{
-        //  RECT rect = new RECT();
-        //  GetWindowRect(hwnd, out rect);
-        //  return new System.Windows.Rect(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
-        //}
-
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetCursorPos(ref POINT pt);
@@ -518,21 +415,7 @@
         private static extern IntPtr WindowFromPoint(POINT Point);
 
         [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("user32.dll")]
-        public static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WINDOWPLACEMENT lpwndpl);
-
-        [DllImport("user32.dll")]
         public static extern bool GetWindowPlacement(IntPtr hWnd, out WINDOWPLACEMENT lpwndpl);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public const int SW_SHOWNORMAL = 1;
         public const int SW_SHOWMINIMIZED = 2;
@@ -587,9 +470,6 @@
             WH_MOUSE_LL = 14
         }
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern uint RegisterWindowMessage(string lpString);
-
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr VirtualAllocEx(ProcessHandle hProcess, IntPtr lpAddress, uint dwSize, AllocationType flAllocationType, MemoryProtection flProtect);
 
@@ -599,23 +479,7 @@
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool WriteProcessMemory(ProcessHandle hProcess, IntPtr lpBaseAddress, IntPtr lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr SetWindowsHookEx(HookType hookType, UIntPtr lpfn, IntPtr hMod, uint dwThreadId);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr SetWindowsHookEx(HookType hookType, HookProc hookProc, IntPtr hMod, uint dwThreadId);
-
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool UnhookWindowsHookEx(IntPtr hhk);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool FreeLibrary(IntPtr hModule);
@@ -633,85 +497,12 @@
 
         #region Console
 
-        /// <summary>
-        /// allocates a new console for the calling process.
-        /// </summary>
-        /// <returns>If the function succeeds, the return value is nonzero.
-        /// If the function fails, the return value is zero.
-        /// To get extended error information, call Marshal.GetLastWin32Error.</returns>
-        [DllImport("kernel32", SetLastError = true)]
-        public static extern bool AllocConsole();
-
-        /// <summary>
-        /// Detaches the calling process from its console
-        /// </summary>
-        /// <returns>If the function succeeds, the return value is nonzero.
-        /// If the function fails, the return value is zero.
-        /// To get extended error information, call Marshal.GetLastWin32Error.</returns>
-        [DllImport("kernel32", SetLastError = true)]
-        public static extern bool FreeConsole();
-
-        /// <summary>
-        /// Attaches the calling process to the console of the specified process.
-        /// </summary>
-        /// <param name="dwProcessId">[in] Identifier of the process, usually will be ATTACH_PARENT_PROCESS</param>
-        /// <returns>If the function succeeds, the return value is nonzero.
-        /// If the function fails, the return value is zero.
-        /// To get extended error information, call Marshal.GetLastWin32Error.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool AttachConsole(uint dwProcessId);
-
         /// <summary>Identifies the console of the parent of the current process as the console to be attached.
         /// always pass this with AttachConsole in .NET for stability reasons and mainly because
         /// I have NOT tested interprocess attaching in .NET so don't blame me if it doesn't work! </summary>
         public const uint ATTACH_PARENT_PROCESS = 0x0ffffffff;
 
         #endregion
-
-        /// <summary>
-        /// Try to get the relative mouse position to the given handle in client coordinates.
-        /// </summary>
-        /// <param name="hWnd">The handle for this method.</param>
-        /// <param name="point">The relative mouse position to the given handle.</param>
-        public static bool TryGetRelativeMousePosition(IntPtr hWnd, out POINT point)
-        {
-            point = default;
-
-            var returnValue = hWnd != IntPtr.Zero
-                              && TryGetPhysicalCursorPos(out point);
-
-            if (returnValue)
-            {
-                ScreenToClient(hWnd, ref point);
-            }
-
-            return returnValue;
-        }
-
-        public static bool TryGetPhysicalCursorPos(out POINT pt)
-        {
-            var returnValue = _GetPhysicalCursorPos(out pt);
-            // Sometimes Win32 will fail this call, such as if you are
-            // not running in the interactive desktop. For example,
-            // a secure screen saver may be running.
-            if (!returnValue)
-            {
-                System.Diagnostics.Debug.WriteLine("GetPhysicalCursorPos failed!");
-                pt.X = 0;
-                pt.Y = 0;
-            }
-
-            return returnValue;
-        }
-
-        [DllImport("user32.dll", CharSet = CharSet.None, SetLastError = true, EntryPoint = "ScreenToClient")]
-        private static extern bool ScreenToClient(IntPtr hWnd, ref POINT point);
-
-        [DllImport("user32.dll", EntryPoint = "GetPhysicalCursorPos", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-#pragma warning disable SA1300
-        private static extern bool _GetPhysicalCursorPos(out POINT lpPoint);
-#pragma warning restore SA1300
     }
 
     // RECT structure required by WINDOWPLACEMENT structure
@@ -769,54 +560,11 @@
         public RECT NormalPosition;
     }
 
-    public enum Wait
-    {
-        INFINITE = -1,
-    }
-
     public enum WaitResult
     {
         WAIT_ABANDONED = 0x80,
         WAIT_OBJECT_0 = 0x00,
         WAIT_TIMEOUT = 0x102,
         WAIT_FAILED = -1
-    }
-
-    public static class ConsoleHelperNew
-    {
-        /// <summary>
-        /// Allocate a console if application started from within windows GUI.
-        /// Detects the presence of an existing console associated with the application and
-        /// attaches itself to it if available.
-        /// </summary>
-        public static void AttachConsoleToParentProcessOrAllocateNewOne()
-        {
-            if (NativeMethods.AttachConsole(NativeMethods.ATTACH_PARENT_PROCESS) == false
-                && Marshal.GetLastWin32Error() == NativeMethods.ERROR_ACCESS_DENIED)
-            {
-                // A console was not allocated, so we need to make one.
-                if (NativeMethods.FreeConsole() == false)
-                {
-                    Trace.WriteLine("Console could not be freed.");
-                }
-                else
-                {
-                    Trace.WriteLine("Console freed.");
-                }
-
-                if (NativeMethods.AttachConsole(NativeMethods.ATTACH_PARENT_PROCESS) == false)
-                {
-                    Trace.WriteLine($"Could not attach to parent process console. Error = {Marshal.GetLastWin32Error()}");
-                }
-                else
-                {
-                    Trace.WriteLine("Console attached to parent process.");
-                }
-            }
-            else
-            {
-                Trace.WriteLine("Console attached to parent process or process is a standalone console application.");
-            }
-        }
     }
 }

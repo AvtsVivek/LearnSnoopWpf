@@ -50,22 +50,7 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
             var transientSettingsData = GetTransientSettingsDataFromJsonString(settingsData);
 
-            IList<AppDomain>? appDomains = null;
-
-            if (transientSettingsData.MultipleAppDomainMode != MultipleAppDomainModeNew.NeverUse)
-            {
-                appDomains = new AppDomainHelper().GetAppDomains();
-            }
-
-            var numberOfAppDomains = appDomains?.Count ?? 1;
-            var succeeded = false;
-            
-            if (numberOfAppDomains == 1)
-            {
-                LogHelper.WriteLine("Only found one app domain. Running in single app domain mode.");
-
-                succeeded = this.RunInCurrentAppDomain(transientSettingsData);
-            }
+            bool succeeded = this.RunInCurrentAppDomain(transientSettingsData);
 
             if (succeeded == false)
             {
@@ -101,19 +86,19 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
                 MessageBox.Show($"Failed to to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
-                if (SnoopModesNew.MultipleAppDomainMode)
-                {
+                //if (SnoopModesNew.MultipleAppDomainMode)
+                //{
                     LogHelper.WriteLine($"Could not snoop a specific app domain with friendly name of \"{AppDomain.CurrentDomain.FriendlyName}\" in multiple app domain mode.");
                     LogHelper.WriteError(exception);
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     MessageBox.Show($"There was an error snooping the application.{Environment.NewLine}{exception}",
                         "Error snooping",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                     // ErrorDialog.ShowDialog(exception, "Error snooping", "There was an error snooping the application.", exceptionAlreadyHandled: true);
-                }
+                //}
 
                 return false;
             }
@@ -162,61 +147,61 @@ namespace ProcInjectorNoSettingsFile.MalDll
                 }
             }
 
-            var useMultipleDispatcherMode = false;
+            // var useMultipleDispatcherMode = false;
             if (dispatcherRootObjectPairs.Count <= 0)
             {
                 return false;
             }
 
-            switch (settingsData.MultipleDispatcherMode)
-            {
-                case MultipleDispatcherModeNew.NeverUse:
-                    useMultipleDispatcherMode = false;
-                    break;
+            //switch (settingsData.MultipleDispatcherMode)
+            //{
+            //    case MultipleDispatcherModeNew.NeverUse:
+            //        useMultipleDispatcherMode = false;
+            //        break;
 
-                case MultipleDispatcherModeNew.AlwaysUse:
-                    useMultipleDispatcherMode = dispatcherRootObjectPairs.Count > 1;
-                    break;
+            //    case MultipleDispatcherModeNew.AlwaysUse:
+            //        useMultipleDispatcherMode = dispatcherRootObjectPairs.Count > 1;
+            //        break;
 
-                case MultipleDispatcherModeNew.Ask when dispatcherRootObjectPairs.Count == 1:
-                    useMultipleDispatcherMode = false;
-                    break;
+            //    case MultipleDispatcherModeNew.Ask when dispatcherRootObjectPairs.Count == 1:
+            //        useMultipleDispatcherMode = false;
+            //        break;
 
-                default:
-                    {
-                        var result =
-                            MessageBox.Show(
-                                "Snoop has noticed windows running in multiple dispatchers.\n\n" +
-                                "Would you like to enter multiple dispatcher mode, and have a separate Snoop window for each dispatcher?\n\n" +
-                                "Without having a separate Snoop window for each dispatcher, you will not be able to Snoop the windows in the dispatcher threads outside of the main dispatcher. " +
-                                "Also, note, that if you bring up additional windows in additional dispatchers (after snooping), you will need to Snoop again in order to launch Snoop windows for those additional dispatchers.",
-                                "Enter Multiple Dispatcher Mode",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question);
+            //    default:
+            //        {
+            //            var result =
+            //                MessageBox.Show(
+            //                    "Snoop has noticed windows running in multiple dispatchers.\n\n" +
+            //                    "Would you like to enter multiple dispatcher mode, and have a separate Snoop window for each dispatcher?\n\n" +
+            //                    "Without having a separate Snoop window for each dispatcher, you will not be able to Snoop the windows in the dispatcher threads outside of the main dispatcher. " +
+            //                    "Also, note, that if you bring up additional windows in additional dispatchers (after snooping), you will need to Snoop again in order to launch Snoop windows for those additional dispatchers.",
+            //                    "Enter Multiple Dispatcher Mode",
+            //                    MessageBoxButton.YesNo,
+            //                    MessageBoxImage.Question);
 
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            useMultipleDispatcherMode = true;
-                        }
+            //            if (result == MessageBoxResult.Yes)
+            //            {
+            //                useMultipleDispatcherMode = true;
+            //            }
 
-                        break;
-                    }
-            }
+            //            break;
+            //        }
+            //}
 
-            if (useMultipleDispatcherMode)
-            {
-                SnoopModesNew.MultipleDispatcherMode = true;
+            //if (useMultipleDispatcherMode)
+            //{
+            //    SnoopModesNew.MultipleDispatcherMode = true;
 
-                var thread = new Thread(DispatchOut)
-                {
-                    Name = "Snoop_DisptachOut_Thread"
-                };
+            //    var thread = new Thread(DispatchOut)
+            //    {
+            //        Name = "Snoop_DisptachOut_Thread"
+            //    };
 
-                thread.Start(new DispatchOutParameters(settingsData, instanceCreator, dispatcherRootObjectPairs));
+            //    thread.Start(new DispatchOutParameters(settingsData, instanceCreator, dispatcherRootObjectPairs));
 
-                // todo: check if we really created something
-                return true;
-            }
+            //    // todo: check if we really created something
+            //    return true;
+            //}
 
             var dispatcherRootObjectPairForInstanceCreation = dispatcherRootObjectPairs.FirstOrDefault(x => x.RootObject is Application) ?? dispatcherRootObjectPairs[0];
 
@@ -249,14 +234,11 @@ namespace ProcInjectorNoSettingsFile.MalDll
                 return Assembly.GetExecutingAssembly();
             }
 
-#if NET6_0_OR_GREATER
             if (args.Name?.StartsWith("System.Management.Automation,") == true
                 && PowerShell.ShellConstants.TryGetPowerShellCoreInstallPath(out var powershellCoreInstallPath))
             {
                 return Assembly.LoadFrom(System.IO.Path.Combine(powershellCoreInstallPath, "System.Management.Automation.dll"));
             }
-#endif
-
             return null;
         }
 

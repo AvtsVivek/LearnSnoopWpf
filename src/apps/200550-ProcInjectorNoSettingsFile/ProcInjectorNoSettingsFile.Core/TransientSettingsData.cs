@@ -4,32 +4,18 @@
     using System.IO;
     using System.Text.Json;
     using System.Xml.Serialization;
-    // using JetBrains.Annotations;
 
-    // [PublicAPI]
     public sealed class TransientSettingsData
     {
         private static readonly XmlSerializer serializer = new(typeof(TransientSettingsData));
 
         public static TransientSettingsData? Current { get; private set; }
 
-        public ProcInjectorNoSettingsFileStartTargetNew StartTarget { get; set; } = ProcInjectorNoSettingsFileStartTargetNew.SnoopUI;
-
-        public MultipleAppDomainModeNew MultipleAppDomainMode { get; set; } = MultipleAppDomainModeNew.Ask;
-
-        public MultipleDispatcherModeNew MultipleDispatcherMode { get; set; } = MultipleDispatcherModeNew.Ask;
-
         public bool SetOwnerWindow { get; set; } = true;
 
         public bool ShowActivated { get; set; } = true;
 
         public long TargetWindowHandle { get; set; }
-
-        public string? ILSpyPath { get; set; } = "%path%";
-
-        public bool EnableDiagnostics { get; set; } = true;
-
-        public string? ProcInjectorNoSettingsFileInstallPath { get; set; } = Environment.GetEnvironmentVariable(SettingsHelper.SNOOP_INSTALL_PATH_ENV_VAR);
 
         public string WriteToFile()
         {
@@ -57,50 +43,5 @@
         {
             return JsonSerializer.Deserialize<TransientSettingsData>(json) ?? new TransientSettingsData();
         }
-
-        public static TransientSettingsData LoadCurrentIfRequired(string settingsFile)
-        {
-            if (Current is not null)
-            {
-                return Current;
-            }
-
-            return LoadCurrent(settingsFile);
-        }
-
-        public static TransientSettingsData LoadCurrent(string settingsFile)
-        {
-            LogHelper.WriteLine($"Loading transient settings file from \"{settingsFile}\"");
-
-            using var stream = new FileStream(settingsFile, FileMode.Open);
-            Current = (TransientSettingsData?)serializer.Deserialize(stream) ?? new TransientSettingsData();
-
-            Environment.SetEnvironmentVariable(SettingsHelper.SNOOP_INSTALL_PATH_ENV_VAR, Current.ProcInjectorNoSettingsFileInstallPath, EnvironmentVariableTarget.Process);
-
-            return Current;
-        }
-    }
-
-    // [PublicAPI]
-    public enum MultipleAppDomainModeNew
-    {
-        Ask = 0,
-        AlwaysUse = 1,
-        NeverUse = 2
-    }
-
-    // [PublicAPI]
-    public enum MultipleDispatcherModeNew
-    {
-        Ask = 0,
-        AlwaysUse = 1,
-        NeverUse = 2
-    }
-
-    // [PublicAPI]
-    public enum ProcInjectorNoSettingsFileStartTargetNew
-    {
-        SnoopUI = 0,
-        Zoomer = 1
     }
 }

@@ -90,12 +90,10 @@ public class ProcessWrapper
 
         foreach (var module in modules)
         {
-#if DEBUG
             Injector.LogMessage(module.szExePath);
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(module.szExePath);
             Injector.LogMessage($"File: {fileVersionInfo.FileVersion}");
             Injector.LogMessage($"Prod: {fileVersionInfo.ProductVersion}");
-#endif
 
             if (module.szModule.StartsWith("wpfgfx_", StringComparison.OrdinalIgnoreCase))
             {

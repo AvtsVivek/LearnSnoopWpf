@@ -16,8 +16,6 @@ namespace ProcInjectorNoSettingsFile.MalDll.Windows
 
         public Window Inspect(object rootObject)
         {
-            // ExceptionHandler.AddExceptionHandler(this.Dispatcher);
-
             this.RootObject = rootObject;
 
             this.Load(rootObject);
