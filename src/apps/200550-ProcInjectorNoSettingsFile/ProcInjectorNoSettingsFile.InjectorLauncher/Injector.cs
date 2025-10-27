@@ -1,6 +1,6 @@
-namespace BasicProcInjector.InjectorLauncher;
+namespace ProcInjectorNoSettingsFile.InjectorLauncher;
 
-using BasicProcInjector.Core;
+using ProcInjectorNoSettingsFile.Core;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -28,14 +28,14 @@ public static class Injector
             Directory.CreateDirectory(applicationDataPath);
         }
 
-        var pathname = Path.Combine(applicationDataPath, "BasicProcInjectorLog.txt");
+        var pathName = Path.Combine(applicationDataPath, "ProcInjectorNoSettingsFileLog.txt");
 
         if (append == false)
         {
-            File.Delete(pathname);
+            File.Delete(pathName);
         }
 
-        var fi = new FileInfo(pathname);
+        var fi = new FileInfo(pathName);
 
         using (var sw = fi.AppendText())
         {
@@ -43,21 +43,9 @@ public static class Injector
         }
     }
 
-    public static void InjectIntoProcess(IntPtr windowHandle, InjectorData injectorData)
-    {
-        var processFromHandle = ProcessWrapper.FromWindowHandle(windowHandle);
-
-        if (processFromHandle is null)
-        {
-            return; // todo: add logging
-        }
-
-        InjectIntoProcess(processFromHandle, injectorData);
-    }
-
     public static void InjectIntoProcess(ProcessWrapper processWrapper, InjectorData injectorData)
     {
-        StartBasicProcInjector(processWrapper, injectorData);
+        StartProcInjectorNoSettingsFile(processWrapper, injectorData);
     }
 
     /// <summary>
@@ -211,9 +199,9 @@ public static class Injector
         return true;
     }
 
-    private static void StartBasicProcInjector(ProcessWrapper processWrapper, InjectorData injectorData)
+    private static void StartProcInjectorNoSettingsFile(ProcessWrapper processWrapper, InjectorData injectorData)
     {
-        var injectorDllName = $"BasicProcInjector.CppInjectorCore.{processWrapper.Architecture}.dll";
+        var injectorDllName = $"ProcInjectorNoSettingsFile.CppInjectorCore.{processWrapper.Architecture}.dll";
         var pathToInjectorDll = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, injectorDllName);
 
         LogMessage($"Trying to load \"{pathToInjectorDll}\"...");
@@ -231,7 +219,7 @@ public static class Injector
             injectorData.FullAssemblyPath,
             injectorData.ClassName,
             injectorData.MethodName,
-            injectorData.SettingsFile,
+            injectorData.SettingsJson,
             tempLogFile
         };
 

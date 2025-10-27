@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="ProcInjectorNoSettingsFile.Core/ProcInjectorNoSettingsFile.Core.csproj" />
+  <Project Path="ProcInjectorNoSettingsFile.CppInjectorCore/ProcInjectorNoSettingsFile.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
+  <Project Path="ProcInjectorNoSettingsFile.InjectorLauncher/ProcInjectorNoSettingsFile.InjectorLauncher.csproj" />
+  <Project Path="ProcInjectorNoSettingsFile.MalDll/ProcInjectorNoSettingsFile.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
+  <Project Path="ProcInjectorNoSettingsFile.WpfInjectorHost/ProcInjectorNoSettingsFile.WpfInjectorHost.csproj" />
+  <Project Path="ProcInjectorNoSettingsFile.WpfTargetUI/ProcInjectorNoSettingsFile.WpfTargetUI.csproj" Id="96b48207-5820-4b19-9a0a-ff6e06a86e17" />
+</Solution>
