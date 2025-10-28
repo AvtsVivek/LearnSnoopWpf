@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="SimpleProcInjectorOne.Core/SimpleProcInjectorOne.Core.csproj" />
+  <Project Path="SimpleProcInjectorOne.CppInjectorCore/SimpleProcInjectorOne.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
+  <Project Path="SimpleProcInjectorOne.InjectorLauncher/SimpleProcInjectorOne.InjectorLauncher.csproj" />
+  <Project Path="SimpleProcInjectorOne.MalDll/SimpleProcInjectorOne.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
+  <Project Path="SimpleProcInjectorOne.WpfInjectorHost/SimpleProcInjectorOne.WpfInjectorHost.csproj" />
+  <Project Path="SimpleProcInjectorOne.WpfTargetUI/SimpleProcInjectorOne.WpfTargetUI.csproj" Id="96b48207-5820-4b19-9a0a-ff6e06a86e17" />
+</Solution>
