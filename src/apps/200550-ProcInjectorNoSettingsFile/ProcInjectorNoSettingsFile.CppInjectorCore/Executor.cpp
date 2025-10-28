@@ -4,9 +4,6 @@
 #include <comdef.h>
 
 #include "NetExecutor.h"
-#ifndef NO_FULL_FRAMEWORK
-#include "NetFrameworkExecutor.h"
-#endif
 
 std::unique_ptr<FrameworkExecutor> GetExecutor(const std::wstring& framework)
 {
@@ -17,12 +14,12 @@ std::unique_ptr<FrameworkExecutor> GetExecutor(const std::wstring& framework)
 		return std::make_unique<NetExecutor>();
 	}
 
-#ifndef NO_FULL_FRAMEWORK
 	if (icase_cmp(framework, L"net462"))
 	{
-		return std::make_unique<NetFrameworkExecutor>();
+		MessageBoxW(NULL, L"Code for .net framework is removed. Will not work", 
+			L"Not for NetFramework", MB_OK | MB_ICONINFORMATION);
+		return 0;
 	}
-#endif
 
 	LogHelper::WriteLine(L"Framework '%s' is not supported.", framework.c_str());
 
