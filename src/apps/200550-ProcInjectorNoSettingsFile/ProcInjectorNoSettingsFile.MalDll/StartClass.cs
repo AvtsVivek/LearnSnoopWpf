@@ -73,7 +73,7 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
                 var instanceCreator = GetInstanceCreator();
 
-                var result = InjectSnoopIntoDispatchers(settingsData, 
+                var result = InjectSnoopIntoDispatchers(settingsData,
                     (data, dispatcherRootObjectPair) => CreateSnoopWindow(data, dispatcherRootObjectPair, instanceCreator));
 
                 LogHelper.WriteLine($"Successfully running Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\".");
@@ -86,25 +86,19 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
                 MessageBox.Show($"Failed to to run Snoop in app domain \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
-                //if (SnoopModesNew.MultipleAppDomainMode)
-                //{
-                    LogHelper.WriteLine($"Could not snoop a specific app domain with friendly name of \"{AppDomain.CurrentDomain.FriendlyName}\" in multiple app domain mode.");
-                    LogHelper.WriteError(exception);
-                //}
-                //else
-                //{
-                    MessageBox.Show($"There was an error snooping the application.{Environment.NewLine}{exception}",
-                        "Error snooping",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    // ErrorDialog.ShowDialog(exception, "Error snooping", "There was an error snooping the application.", exceptionAlreadyHandled: true);
-                //}
+                LogHelper.WriteLine($"Could not snoop a specific app domain with friendly name of \"{AppDomain.CurrentDomain.FriendlyName}\" in multiple app domain mode.");
+                LogHelper.WriteError(exception);
+                MessageBox.Show($"There was an error snooping the application.{Environment.NewLine}{exception}",
+                    "Error snooping",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
 
                 return false;
             }
         }
 
-        private static bool InjectSnoopIntoDispatchers(TransientSettingsData settingsData, 
+        private static bool InjectSnoopIntoDispatchers(TransientSettingsData settingsData,
             Func<TransientSettingsData, DispatcherRootObjectPair, SnoopMainBaseWindow> instanceCreator)
         {
             // Check and see if any of the PresentationSources have different dispatchers.
@@ -252,7 +246,7 @@ namespace ProcInjectorNoSettingsFile.MalDll
         {
             var snoopWindow = instanceCreator();
 
-            var targetWindowOnSameDispatcher = WindowHelperNew.GetVisibleWindow(settingsData.TargetWindowHandle, 
+            var targetWindowOnSameDispatcher = WindowHelperNew.GetVisibleWindow(settingsData.TargetWindowHandle,
                 dispatcherRootObjectPair.Dispatcher);
 
             snoopWindow.Title = TryGetWindowOrMainWindowTitle(targetWindowOnSameDispatcher);
@@ -313,8 +307,8 @@ namespace ProcInjectorNoSettingsFile.MalDll
 
         private class DispatchOutParameters
         {
-            public DispatchOutParameters(TransientSettingsData settingsData, 
-                Func<TransientSettingsData, DispatcherRootObjectPair, Window> instanceCreator, 
+            public DispatchOutParameters(TransientSettingsData settingsData,
+                Func<TransientSettingsData, DispatcherRootObjectPair, Window> instanceCreator,
                 List<DispatcherRootObjectPair> dispatcherRootObjectPairs)
             {
                 this.SettingsData = settingsData;

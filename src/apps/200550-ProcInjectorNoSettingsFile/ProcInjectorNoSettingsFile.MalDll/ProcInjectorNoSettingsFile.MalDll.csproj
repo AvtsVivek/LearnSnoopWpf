@@ -23,4 +23,8 @@
     <Resource Include="Snoop.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+
 </Project>
