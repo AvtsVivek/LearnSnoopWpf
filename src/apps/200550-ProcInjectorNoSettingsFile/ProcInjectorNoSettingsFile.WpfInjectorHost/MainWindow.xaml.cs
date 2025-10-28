@@ -73,8 +73,6 @@
 
             WindowInfo windowInfo = this.processManager.GetWindowInfo(windowHandle);
 
-            var processWrapper = ProcessWrapper.From(processId, windowHandle);
-
             this.snoopClient.StartSnoopProcessNew(processId, windowHandle);
         }
 

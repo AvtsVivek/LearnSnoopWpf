@@ -3,6 +3,7 @@ namespace ProcInjectorNoSettingsFile.InjectorLauncher;
 using ProcInjectorNoSettingsFile.Core;
 using System;
 using System.Diagnostics;
+using System.Windows;
 
 public class ProcessWrapper
 {
@@ -45,51 +46,18 @@ public class ProcessWrapper
         }
     }
 
-    public static ProcessWrapper? FromWindowHandle(IntPtr handle)
-    {
-        var processFromWindowHandle = GetProcessFromWindowHandle(handle);
-
-        if (processFromWindowHandle is null)
-        {
-            return null;
-        }
-
-        return new ProcessWrapper(processFromWindowHandle, handle);
-    }
-
-    private static Process? GetProcessFromWindowHandle(IntPtr windowHandle)
-    {
-        _ = NativeMethods.GetWindowThreadProcessId(windowHandle, out var processId);
-
-        if (processId == 0)
-        {
-            Injector.LogMessage($"Could not get process for window handle {windowHandle}");
-            return null;
-        }
-
-        try
-        {
-            var process = Process.GetProcessById(processId);
-            return process;
-        }
-        catch (Exception e)
-        {
-            Injector.LogMessage($"Could not get process for PID = {processId}.");
-            Injector.LogMessage(e.ToString());
-        }
-
-        return null;
-    }
-
     private static string GetSupportedTargetFramework(Process process)
     {
         var modules = NativeMethods.GetModules(process);
 
-        FileVersionInfo? systemRuntimeVersion = null;
-        FileVersionInfo? wpfGFXVersion = null;
+        FileVersionInfo systemRuntimeVersion = null;
+        FileVersionInfo wpfGFXVersion = null;
+
+        var moduleCount = 0;
 
         foreach (var module in modules)
         {
+            moduleCount++;
             Injector.LogMessage(module.szExePath);
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(module.szExePath);
             Injector.LogMessage($"File: {fileVersionInfo.FileVersion}");
@@ -114,6 +82,7 @@ public class ProcessWrapper
         }
 
         var productVersion = TryParseVersion(relevantVersionInfo.ProductVersion ?? string.Empty);
+
         return productVersion.Major switch
         {
             >= 6 => "net6.0-windows",
