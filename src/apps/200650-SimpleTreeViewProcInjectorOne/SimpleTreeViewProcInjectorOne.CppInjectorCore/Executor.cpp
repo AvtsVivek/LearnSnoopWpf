@@ -34,19 +34,19 @@ extern "C" __declspec(dllexport) int STDMETHODVCALLTYPE ExecuteInDefaultAppDomai
 		LogHelper::WriteLine(input);
 		const auto parts = split(input, L"<|>");
 
-		if (parts.size() < 6)
+		if (parts.size() < 5)
 		{
-			LogHelper::WriteLine(L"Not enough parameters.");
+			// LogHelper::WriteLine(L"Not enough parameters.");
+			MessageBoxW(NULL, L"Not enough parameters",
+				L"Erorro ", MB_OK | MB_ICONINFORMATION);
 			return E_INVALIDARG;
 		}
 
-		const auto& framework = parts.at(0);
-		const auto& assemblyPath = parts.at(1);
-		const auto& className = parts.at(2);
-		const auto& method = parts.at(3);
-		// const auto& parameter = parts.at(4);
-		const auto& parameterJson = parts.at(4);
-		const auto& logFile = parts.at(5);
+		const auto& assemblyPath = parts.at(0);
+		const auto& className = parts.at(1);
+		const auto& method = parts.at(2);
+		const auto& parameterJson = parts.at(3);
+		const auto& logFile = parts.at(4);
 
 		LogHelper::SetLogFile(logFile);
 		LogHelper::WriteLine(input);
@@ -65,6 +65,9 @@ extern "C" __declspec(dllexport) int STDMETHODVCALLTYPE ExecuteInDefaultAppDomai
 
 		if (FAILED(hr))
 		{
+			MessageBoxW(NULL, L"FAiled ...",
+				L"Failed Failed", MB_OK | MB_ICONINFORMATION);
+
 			const _com_error err(hr);
 
 			LogHelper::WriteLine(L"Error while calling '%s' on '%s' from '%s' with '%s'", method.c_str(), className.c_str(), assemblyPath.c_str(), parameterJson.c_str());

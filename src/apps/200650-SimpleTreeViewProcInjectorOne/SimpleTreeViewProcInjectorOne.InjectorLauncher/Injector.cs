@@ -215,8 +215,7 @@ public static class Injector
 
         var parameters = new[]
         {
-            // processWrapper.SupportedFrameworkName,
-            "",
+            
             injectorData.FullAssemblyPath,
             injectorData.ClassName,
             injectorData.MethodName,
