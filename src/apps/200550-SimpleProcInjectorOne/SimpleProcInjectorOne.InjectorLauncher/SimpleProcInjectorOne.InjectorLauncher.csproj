@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>exe</OutputType>
+		<UseWPF>true</UseWPF>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SimpleProcInjectorOne.Core\SimpleProcInjectorOne.Core.csproj" />
+		<ProjectReference Include="..\SimpleProcInjectorOne.MalDll\SimpleProcInjectorOne.MalDll.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="SimpleTreeViewProcInjectorOne.Core/SimpleTreeViewProcInjectorOne.Core.csproj" />
+  <Project Path="SimpleTreeViewProcInjectorOne.CppInjectorCore/SimpleTreeViewProcInjectorOne.CppInjectorCore.vcxproj" Id="1e16fd0c-92aa-403d-b949-1f19b96dd3ce" />
+  <Project Path="SimpleTreeViewProcInjectorOne.InjectorLauncher/SimpleTreeViewProcInjectorOne.InjectorLauncher.csproj" />
+  <Project Path="SimpleTreeViewProcInjectorOne.MalDll/SimpleTreeViewProcInjectorOne.MalDll.csproj" Id="771ab988-f4cb-4474-b4cf-bc69bbdfe6af" />
+  <Project Path="SimpleTreeViewProcInjectorOne.WpfInjectorHost/SimpleTreeViewProcInjectorOne.WpfInjectorHost.csproj" />
+  <Project Path="SimpleTreeViewProcInjectorOne.WpfUcTarget/SimpleTreeViewProcInjectorOne.WpfUcTarget.csproj" />
+</Solution>

@@ -1,0 +1,42 @@
+﻿<local:SnoopMainBaseWindow x:Class="SimpleTreeViewProcInjectorOne.MalDll.Windows.InjectedWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleTreeViewProcInjectorOne.MalDll.Windows"
+        mc:Ignorable="d"
+        Title="InjectedWindow" Height="450" Width="800">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Center" x:Name="secondTextBox" Margin="10" FontSize="25" >Process Id:</TextBlock>
+                <TextBlock HorizontalAlignment="Center" x:Name="resultTextBox" Margin="10" FontSize="25" >0</TextBlock>
+            </StackPanel>
+            <TextBlock HorizontalAlignment="Center" x:Name="spacerTextBox" Margin="10" FontSize="25" ></TextBlock>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock HorizontalAlignment="Center" x:Name="secondProcessNameTextBox" Margin="10" FontSize="25" >Process Name:</TextBlock>
+                <TextBlock HorizontalAlignment="Center" x:Name="resultProcessNameTextBox" Margin="10" FontSize="25" ></TextBlock>
+            </StackPanel>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                <TreeView x:Name="ControlTreeView">
+                </TreeView>
+            </ScrollViewer>
+            <StackPanel Grid.Column="1" Margin="4" Orientation="Vertical" >
+                <Button x:Name="RefreshButton" Content="Refresh" Width="75" Margin="0,0,0,4" Click="RefreshButton_Click"/>
+                <Button x:Name="FindViewModelButton" Content="Find ViewModel" Width="100" Margin="0,0,0,4" Click="FindViewModelButton_Click"/>
+                <Button x:Name="ExpandAllButton" Content="Expand All" Width="75" Margin="0,0,0,4" Click="ExpandAllButton_Click"/>
+                <Button x:Name="CollapseAllButton" Content="Collapse All" Width="75" Margin="0,0,0,4" Click="CollapseAllButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</local:SnoopMainBaseWindow>
